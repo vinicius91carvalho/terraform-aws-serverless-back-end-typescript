@@ -13,21 +13,48 @@ This API allows to create, update, delete and list consumers. It allows search c
 
 ## How do I get set up? ###
 
-* How to run using local machine?
+### How to run using docker?
+
+Obs: You need to install Docker and Docker Compose
+
+```bash
+docker-compose up
+```
+
+or (You need to install Node.js LTS version)
+
+```bash
+npm run up
+```
+** Use `docker-compose down` or `npm run down` to stop the containers
+
+### How to run using local machine?
 
 ```bash
 npm install
 npm run build:start
 ```
 
-* How to debug?
+### How to debug? You can use Docker instructions above too.
 
-* How to run tests? (You can see more test scripts on package.json)
+```bash
+npm run debug
+```
+
+### How to run tests? (You can see more test scripts on package.json)
 
 ```bash
 npm install
 npm run test:ci
 ```
+
+## IDE
+
+VSCode (https://code.visualstudio.com/)
+
+### Plugins
+
+ESLint (dbaeumer.vscode-eslint)
 
 ## Methodologies and Designs
 
