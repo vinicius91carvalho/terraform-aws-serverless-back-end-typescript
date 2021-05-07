@@ -48,3 +48,8 @@ Thumbs.db
 *.mov
 *.wmv
 
+# Other files and directories to ignore
+yarn.lock
+coverage
+yarn-error.log
+reports
