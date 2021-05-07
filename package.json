@@ -4,7 +4,11 @@
   "description": "Customer's API that provides end/entrypoints to fetch consumer's data",
   "main": "index.js",
   "scripts": {
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "start": "node dist/main/server.js",
+    "build": "rimraf dist && tsc -p tsconfig-build.json",
+    "build:watch": "rimraf dist && tsc -p tsconfig-build.json -w",
+    "build:start": "npm run build && npm run start"
   },
   "repository": {
     "type": "git",
@@ -19,6 +23,13 @@
   "homepage": "https://bitbucket.org/vinicius91carvalho/customer-api#readme",
   "devDependencies": {
     "git-commit-msg-linter": "3.1.0",
-    "husky": "6.0.0"
+    "husky": "6.0.0",
+    "module-alias": "2.2.2",
+    "rimraf": "3.0.2",
+    "ts-node": "9.1.1",
+    "typescript": "4.2.4"
+  },
+  "_moduleAliases": {
+    "@": "dist"
   }
 }
