@@ -1,29 +1,56 @@
-# README #
+# Consumer API
 
-This README would normally document whatever steps are necessary to get your application up and running.
+## What is this repository for? ###
 
-### What is this repository for? ###
+This API allows to create, update, delete and list consumers. It allows search consumers by list API using search query param.
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+## APIs built
 
-### How do I get set up? ###
+1. [Save consumer](./requirements/save-consumer.md)
+2. [Load consumer by id](./requirements/load-consumer-by-id.md)
+3. [List consumers](./requirements/list-consumers.md)
+4. [Delete consumer by id](./requirements/delete-consumer-by-id.md)
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+## How do I get set up? ###
 
-### Contribution guidelines ###
+* How to run using local machine?
 
-* Writing tests
-* Code review
-* Other guidelines
+```bash
+npm install
+npm run build:start
+```
 
-### Who do I talk to? ###
+* How to debug?
 
-* Repo owner or admin
-* Other community or team contact
+* How to run tests? (You can see more test scripts on package.json)
+
+```bash
+npm install
+npm run test:ci
+```
+
+## Methodologies and Designs
+
+* TDD
+* Clean Architecture
+* Conventional Commits
+* GitFlow
+* Use Cases
+
+## Principles
+
+* Single Responsibility Principle (SRP)
+* Open Closed Principle (OCP)
+* Liskov Substitution Principle (LSP)
+* Interface Segregation Principle (ISP)
+* Dependency Inversion Principle (DIP)
+* Separation of Concerns (SOC)
+* Don't Repeat Yourself (DRY)
+* You Aren't Gonna Need It (YAGNI)
+* Keep It Simple, Silly (KISS)
+* Composition Over Inheritance
+* Small Commits
+
+## Who do I talk to? ###
+
+Send an e-mail to **vinicius91carvalho@gmail.com**
