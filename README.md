@@ -32,7 +32,7 @@ npm run up
 
 ```bash
 npm install
-npm run build:start
+npm run debug
 ```
 
 ### How to debug? You can use Docker instructions above too.
@@ -41,11 +41,19 @@ npm run build:start
 npm run debug
 ```
 
+After the command above was executed, you need to run "Attach to Node" debug configuration
+
 ### How to run tests? (You can see more test scripts on package.json)
 
 ```bash
 npm install
 npm run test:ci
+```
+
+## How can I get the tokens from API using AWS CLI?
+
+```bash
+aws cognito-idp admin-initiate-auth --cli-input-json file://creds.json
 ```
 
 ## IDE

@@ -48,6 +48,9 @@ Thumbs.db
 *.mov
 *.wmv
 
+# Local .terraform directories
+.terraform
+
 # Other files and directories to ignore
 yarn.lock
 coverage
@@ -56,3 +59,4 @@ reports
 .build
 .webpack
 .serverless
+creds.json

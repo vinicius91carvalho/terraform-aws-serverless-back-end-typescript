@@ -31,3 +31,6 @@ functions:
             path: /hello
             method: GET
             cors: true
+            authorizer:
+                name: authorizer
+                arn: ${ssm:${self:custom.stage}-cognito-user-pool-arn}
