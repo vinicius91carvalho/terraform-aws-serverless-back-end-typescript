@@ -13,6 +13,12 @@ terraform {
   }
 }
 
+module "lambda" {
+  source                   = "./lambda"
+  environment              = var.environment
+  project_name             = var.project_name
+}
+
 module "auth" {
   source                   = "./auth"
   environment              = var.environment

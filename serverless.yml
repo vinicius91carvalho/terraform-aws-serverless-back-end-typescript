@@ -23,6 +23,17 @@ custom:
         includeModules: true
 
 functions:
+    login:
+        role: ${ssm:${self:custom.stage}-lambda-cognito-iam-role} 
+        handler: src/main/routes/login.handler
+        events:
+        - http:
+            path: /login
+            method: POST
+            cors: true
+        environment:
+            COGNITO_USER_POOL_ID: ${ssm:${self:custom.stage}-cognito-user-pool-id}
+            COGNITO_CLIENT_ID: ${ssm:${self:custom.stage}-cognito-user-client-id}
     helloWorld:
         handler: src/main/routes/hello-world.handler
         description: Lambda function just test purpose
