@@ -184,13 +184,11 @@ pipelines:
           artifacts:
             - outputs
       - step:
-          name: Tag version
-          image: atlassian/default-image:2
           script:
-            - git remote set-url origin ${BITBUCKET_GIT_SSH_ORIGIN}
             - dt=$(date '+%Y-%m-%d_%H%M');
             - git tag release-${dt} ${BITBUCKET_COMMIT}
-            - git push origin --tags
+            - git tag -am "Tagging for release ${BITBUCKET_BUILD_NUMBER}" release-${dt}-${BITBUCKET_BUILD_NUMBER}
+            - git push origin release-${dt}-${BITBUCKET_BUILD_NUMBER}
           artifacts:
             - outputs
       - step:
