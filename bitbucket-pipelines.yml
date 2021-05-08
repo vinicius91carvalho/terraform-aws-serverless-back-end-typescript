@@ -1,0 +1,209 @@
+image: atlassian/default-image:2
+
+options:
+  max-time: 30
+
+definitions:
+  caches:
+    npm: $HOME/.npm
+
+pipelines:
+  branches:
+    "{feature/**,release/**,hotfix/**}":
+      - step:
+          name: Apply infrastucture
+          image: amazon/aws-cli
+          script:
+            # Install Terraform -> dev
+            - echo Downloading Terraform executable
+            - mkdir -p ~/bin
+            - cd ~/bin
+            - export PATH="$PATH:/root/bin"
+            - apk add --update ca-certificates openssl curl && update-ca-certificates
+            - wget https://releases.hashicorp.com/terraform/0.15.3/terraform_0.15.3_linux_amd64.zip
+            - echo Terraform was downloaded successfully.
+            - unzip terraform_0.15.3_linux_amd64.zip
+            # Collect the code of the branch
+            - echo The branch's name complete is ${BITBUCKET_BRANCH}
+            - echo branch_name $BITBUCKET_BRANCH >> ${BITBUCKET_CLONE_DIR}/tempBranchNameFile
+            - BRANCH_NAME=$(awk '{print $2}' $BITBUCKET_CLONE_DIR/tempBranchNameFile | cut -d'/' -f 2 | sed -e 's/[^A-Za-z0-9]//g' | tr '[:upper:]' '[:lower:]')
+            - echo The parsed name is ${BRANCH_NAME}
+            - BRANCH_NAME_LENGTH=${#BRANCH_NAME}
+            - echo The total branch name cannot be more than 10 characters. The actual size is ${BRANCH_NAME_LENGTH} characters.
+            - if [ $BRANCH_NAME_LENGTH -gt 10 ]; then exit 1; else echo The resources will be created with the name ${BRANCH_NAME_LENGTH}; fi
+            # Provision Terraform resources
+            - cd ${BITBUCKET_CLONE_DIR}/terraform
+            - echo Initializing Terraform
+            - terraform init
+            - echo Selecting the correct workspace
+            - (terraform workspace new $BRANCH_NAME || true) && terraform workspace select $BRANCH_NAME
+            # Ensure Terraform syntax is valid before proceeding.
+            - echo Validating the template
+            - terraform validate -var-file=dev.tfvars -var="environment=${BRANCH_NAME}"
+            - echo Applying the template on the $BRANCH_NAME environment
+            # Ensure this step passes so that the state is always pushed.
+            - terraform apply -var-file=dev.tfvars -var="environment=${BRANCH_NAME}" -auto-approve
+            - terraform output > ${BITBUCKET_CLONE_DIR}/outputs
+            - echo branch_name $BRANCH_NAME >> ${BITBUCKET_CLONE_DIR}/outputs
+            - cat ${BITBUCKET_CLONE_DIR}/outputs
+          artifacts:
+            - outputs
+      - step:
+          name: Run tests
+          image: node:12.16.2
+          caches:
+            - npm
+          script:
+            # Install dependencies
+            - echo Installing NPM dependencies
+            - npm install
+            - npm run test:ci
+            - echo Dependencies installed successfully
+          artifacts:
+            - ./**
+            - outputs
+      - step:
+          image: amazon/aws-cli
+          name: Deploy
+          script:
+            - echo Install NPM
+            - apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.9/main/ npm curl
+            - echo Installing Serverless Framework
+            - npm install -g serverless@2.40.0
+            - cd api/
+            - BRANCH_NAME=$(awk '/branch_name/ {print $2}' ${BITBUCKET_CLONE_DIR}/outputs)
+            - echo Deploy the APIs
+            - sls deploy -v -s ${BRANCH_NAME}
+          artifacts:
+            - outputs
+    master:
+      - step:
+          name: Apply infrastucture on stage
+          image: amazon/aws-cli
+          script:
+            #
+            # Install Terraform -> stage
+            #
+            - echo Downloading Terraform executable
+            - mkdir -p ~/bin
+            - cd ~/bin
+            - export PATH="$PATH:/root/bin"
+            - apk add --update ca-certificates openssl curl && update-ca-certificates
+            - wget https://releases.hashicorp.com/terraform/0.15.3/terraform_0.15.3_linux_amd64.zip
+            - echo Terraform was downloaded successfully.
+            - unzip terraform_0.15.3_linux_amd64.zip
+
+            #
+            # Provision Terraform resources
+            #
+            - cd ${BITBUCKET_CLONE_DIR}/terraform
+            - echo Initializing Terraform
+            - terraform init
+            - echo Selecting the correct workspace
+            - (terraform workspace new stage || true) && terraform workspace select stage
+
+            # Ensure Terraform syntax is valid before proceeding.
+            - echo Validating the template
+            - terraform validate -var-file=stage.tfvars
+            - echo Applying the template on the stage environment
+            # Ensure this step passes so that the state is always pushed.
+            - terraform apply -var-file=stage.tfvars -auto-approve
+            - terraform output > ${BITBUCKET_CLONE_DIR}/outputs
+            - cat ${BITBUCKET_CLONE_DIR}/outputs
+          artifacts:
+            - outputs
+      - step:
+          name: Run tests
+          image: node:12.16.2
+          caches:
+            - npm
+          script:
+            # Install dependencies
+            - echo Installing NPM dependencies
+            - npm install
+            - npm run test:ci
+            - echo Dependencies installed successfully
+          artifacts:
+            - ./**
+            - outputs
+      - step:
+          image: amazon/aws-cli
+          name: Deploy to stage
+          deployment: staging
+          script:
+            - echo Install NPM
+            - apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.9/main/ npm curl
+            - echo Installing Serverless Framework
+            - npm install -g serverless@2.40.0
+            - cd api/
+            - echo Cria o domínio da API
+            - sls create_domain --stage stage
+            - echo Deploy the APIs
+            - sls deploy -v -s stage
+          artifacts:
+            - outputs
+      - step:
+          name: Apply infrastucture on prod stage
+          image: amazon/aws-cli
+          trigger: manual
+          script:
+            #
+            # Install Terraform -> prod
+            #
+            - echo Downloading Terraform executable
+            - mkdir -p ~/bin
+            - cd ~/bin
+            - export PATH="$PATH:/root/bin"
+            - apk add --update ca-certificates openssl curl && update-ca-certificates
+            - wget https://releases.hashicorp.com/terraform/0.15.3/terraform_0.15.3_linux_amd64.zip
+            - echo Terraform was downloaded successfully.
+            - unzip terraform_0.15.3_linux_amd64.zip
+
+            #
+            # Provision Terraform resources
+            #
+            - cd ${BITBUCKET_CLONE_DIR}/terraform
+            - echo Initializing Terraform
+            - terraform init
+            - echo Selecting the correct workspace
+            - (terraform workspace new prod || true) && terraform workspace select prod
+
+            # Ensure Terraform syntax is valid before proceeding.
+            - echo Validating the template
+            - terraform validate -var-file=prod.tfvars
+            - echo Applying the template on the prod environment
+            # Ensure this step passes so that the state is always pushed.
+            - terraform apply -var-file=prod.tfvars -auto-approve
+            - terraform output > ${BITBUCKET_CLONE_DIR}/outputs
+            - cat ${BITBUCKET_CLONE_DIR}/outputs
+          artifacts:
+            - outputs
+      - step:
+          name: Tag version
+          image: atlassian/default-image:2
+          script:
+            - git remote set-url origin ${BITBUCKET_GIT_SSH_ORIGIN}
+            - dt=$(date '+%Y-%m-%d_%H%M');
+            - git tag release-${dt} ${BITBUCKET_COMMIT}
+            - git push origin --tags
+          artifacts:
+            - outputs
+      - step:
+          image: amazon/aws-cli
+          name: Deploy to prod
+          deployment: production
+          caches:
+            - npm
+          script:
+            - echo Install NPM
+            - apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.9/main/ npm curl
+            - cd api/
+            - echo Installing Serverless Framework
+            - npm install -g serverless@2.40.0
+            - echo Installing NPM dependencies
+            - npm install
+            - echo Dependencies installed successfully
+            - echo Deploy the APIs
+            - sls deploy -v -s prod
+          artifacts:
+            - outputs
