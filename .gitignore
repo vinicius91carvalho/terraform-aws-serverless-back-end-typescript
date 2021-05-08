@@ -51,6 +51,27 @@ Thumbs.db
 # Local .terraform directories
 .terraform
 
+# Compiled files
+*.tfstate
+*.tfstate.backup
+*.tfstate.lock.info
+
+# logs
+*.log
+
+# Directories
+.terraform/
+.vagrant/
+
+# SSH Keys
+*.pem
+
+# Backup files
+*.bak
+
+# Ignored Terraform files
+*gitignore*.tf
+
 # Other files and directories to ignore
 yarn.lock
 coverage
