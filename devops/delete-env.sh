@@ -1,13 +1,11 @@
 #!/bin/bash
 # How to use: BRANCH_NAME=sc2002 sh delete-env.sh
-echo Destryoing the domin in Route53 to the API of the $BRANCH_NAME
-sls delete_domain --stage $BRANCH_NAME
-
+cd ..
 echo Destroying APIs and Lambdas
 sls remove -v -s $BRANCH_NAME
 
 echo Selecting workspace
-cd devops
+cd devops/terraform
 # terraform workspace select $BRANCH_NAME
 terraform workspace select $BRANCH_NAME
 
