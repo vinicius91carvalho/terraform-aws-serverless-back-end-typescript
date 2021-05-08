@@ -2,13 +2,17 @@ version: "3"
 services:
   api:
     container_name: api-container
-    image: node:14
+    image: node:12.16.2-alpine
     working_dir: /usr/src/customer-api
     restart: always
-    command: bash -c "npm install --only=prod && npm run debug"
+    command: /bin/sh -c "yarn install && npm run debug -- --host 0.0.0.0"
     volumes:
-      - ./dist/:/usr/src/customer-api/dist/
       - ./package.json:/usr/src/customer-api/package.json
+      - ./serverless.yml:/usr/src/customer-api/serverless.yml
+      - ./webpack.config.js:/usr/src/customer-api/webpack.config.js
+      - ./tsconfig.json:/usr/src/customer-api/tsconfig.json
+      - ./tsconfig-build.json:/usr/src/customer-api/tsconfig-build.json
+      - ./src:/usr/src/customer-api/src
     ports:
       - "3000:3000"
       - "9222:9222"
