@@ -184,6 +184,7 @@ pipelines:
           artifacts:
             - outputs
       - step:
+          name: Tag version
           script:
             - dt=$(date '+%Y-%m-%d_%H%M');
             - git tag release-${dt} ${BITBUCKET_COMMIT}
