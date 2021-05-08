@@ -53,3 +53,6 @@ yarn.lock
 coverage
 yarn-error.log
 reports
+.build
+.webpack
+.serverless

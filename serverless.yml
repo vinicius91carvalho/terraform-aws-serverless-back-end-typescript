@@ -1,0 +1,33 @@
+service: consumer-api
+
+frameworkVersion: '2'
+
+plugins:
+    - serverless-webpack
+    - serverless-offline
+
+provider:
+    name: aws
+    runtime: nodejs12.x
+    region: us-east-1
+    stage: dev
+    memorySize: 128
+    timeout: 5
+
+package:
+  individually: true
+
+custom:
+    stage: ${opt:stage, self:provider.stage}
+    webpack:
+        includeModules: true
+
+functions:
+    helloWorld:
+        handler: src/main/routes/hello-world.handler
+        description: Lambda function just test purpose
+        events:
+        - http:
+            path: /hello
+            method: GET
+            cors: true
