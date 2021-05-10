@@ -65,7 +65,7 @@ describe('CustomerDynamoDBRepository', () => {
     })
   })
 
-  describe('find()', () => {
+  describe('findByEmail()', () => {
     test('Should call query method on DocumentClient with correct values', async () => {
       const { sut, fakeCustomer } = makeSut()
       querySpy.mockImplementationOnce(() => ({
@@ -79,6 +79,26 @@ describe('CustomerDynamoDBRepository', () => {
         KeyConditionExpression: 'id = :id',
         ExpressionAttributeValues: {
           ':id': getUuid(fakeCustomer.email)
+        }
+      }
+      expect(querySpy).toHaveBeenCalledWith(params)
+    })
+  })
+
+  describe('findById()', () => {
+    test('Should call query method on DocumentClient with correct values', async () => {
+      const { sut, fakeCustomer } = makeSut()
+      querySpy.mockImplementationOnce(() => ({
+        promise: async () => Promise.resolve({
+          Items: [fakeCustomer]
+        })
+      }))
+      await sut.findById(fakeCustomer.id)
+      const params = {
+        TableName: process.env.DYNAMODB_CUSTOMER_TABLE_NAME,
+        KeyConditionExpression: 'id = :id',
+        ExpressionAttributeValues: {
+          ':id': fakeCustomer.id
         }
       }
       expect(querySpy).toHaveBeenCalledWith(params)
