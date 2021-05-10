@@ -38,7 +38,7 @@ const makeSut = (): SutTypes => {
   }
 }
 
-describe('customer Controller', () => {
+describe('SaveCustomerController', () => {
   test('Should call validator with correct values', async () => {
     const { sut, customerValidatorSpy, fakeRequest } = makeSut()
     await sut.handle(fakeRequest)

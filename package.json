@@ -12,8 +12,6 @@
     "test:unit:watch": "npm run test:unit -- --watch",
     "test:integration": "npm run test -- -c jest-integration.config.js",
     "test:integration:watch": "npm run test:integration -- --watch",
-    "test:e2e": "npm run test -- -c jest-e2e.config.js",
-    "test:e2e:watch": "npm run test:e2e -- --watch",
     "test:ci": "npm test -- --coverage",
     "test:staged": "npm run test:unit -- --findRelatedTests"
   },

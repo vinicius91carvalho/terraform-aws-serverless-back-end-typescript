@@ -6,8 +6,8 @@ interface UserData {
 export interface HttpRequest<T> {
   user: UserData
   path: string
-  pathParameters: {}
-  queryStringParameters: {}
+  pathParameters: any
+  queryStringParameters: any
   body: T
 }
 

@@ -121,6 +121,46 @@
                     }
                 }
             }
+        },
+        "/customers/{customerId}": {
+            "get": {
+                "security": [
+                    {
+                    "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "Customer"
+                ],
+                "summary": "To get a specific customer by id",
+                "description": "Allow find a customer by id",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "customerId",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true,
+                        "description": "Customer's id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/schemas/customer"
+                                }
+                            }
+                        }
+                    },
+                    "204": {
+                        "description": "No content"
+                    }
+                }
+            }
         }
     },
     "schemas": {

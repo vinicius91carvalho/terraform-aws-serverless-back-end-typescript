@@ -7,15 +7,14 @@ export const adaptHandler = (controller: Controller) => {
   return async (event: APIGatewayProxyEvent) => {
     const userGroup = event?.requestContext?.authorizer?.claims?.['cognito:groups']
     const userEmail = event?.requestContext?.authorizer?.claims?.email
-
     const request: HttpRequest<any> = {
       user: {
         userEmail,
         userGroup
       },
       path: event.path,
-      pathParameters: event.headers.pathParameters,
-      queryStringParameters: event.headers.queryStringParameters,
+      pathParameters: event.pathParameters,
+      queryStringParameters: event.queryStringParameters,
       body: JSON.parse(event.body)
     }
     const httpResponse = await controller.handle(request)
