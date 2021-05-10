@@ -1,0 +1,277 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Customer API - Pagaleve Challenge",
+        "description": "Customer's API that provides endpoints to fetch customer's data",
+        "version": "1.1.0",
+        "contact": {
+            "name": "Vinicius de Almeida Carvalho",
+            "email": "vinicius91carvalho@gmail.com",
+            "url": "https://www.linkedin.com/in/vinicius-carvalho-a04b46116/"
+        },
+        "license": {
+            "name": "GPL-3.0-or-later",
+            "url": "https://spdx.org/licenses/GPL-3.0-or-later.html"
+        }
+    },
+    "servers": [
+        {
+            "url": "https://stage-customer-api.pagaleve.me/v1",
+            "description": "stage"
+        },
+        {
+            "url": "https://customer-api.pagaleve.me/v1",
+            "description": "prod"
+        },
+        {
+            "url": "https://savecustomer-customer-api.pagaleve.me/v1",
+            "description": "feature"
+        }
+    ],
+    "tags": [
+        {
+            "name": "Authentication",
+            "description": "Login's API"
+        },
+        {
+            "name": "Customer",
+            "description": "To manage customers"
+        }
+    ],
+    "paths": {
+        "/login": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "API to users authenticate",
+                "description": "This route can be accessed by any user",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/schemas/loginParams"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/schemas/loginResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/badRequest"
+                    },
+                    "500": {
+                        "$ref": "#/components/serverError"
+                    }
+                }
+            }
+        },
+        "/customers": {
+            "put": {
+                "security": [
+                    {
+                    "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "Customer"
+                ],
+                "summary": "To manage customers",
+                "description": "Allows create, update, find, list, delete and search customers",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/schemas/customer"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Success. Returned when a user is created.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/schemas/customerResponse"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "Success. Returned when a user is updated.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/schemas/customerResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "schemas": {
+        "loginParams": {
+            "type": "object",
+            "properties": {
+                "username": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "username",
+                "password"
+            ]
+        },
+        "loginResponse": {
+            "type": "object",
+            "properties": {
+                "ChallengeParameters": {
+                    "type": "object"
+                },
+                "AuthenticationResult": {
+                    "type": "object",
+                    "properties": {
+                        "AccessToken": "string",
+                        "ExpiresIn": "number",
+                        "TokenType": "string",
+                        "RefreshToken": "string",
+                        "IdToken": "string"
+                    }
+                }
+            },
+            "required": [
+                "username",
+                "password"
+            ]
+        },
+        "customer": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "fullName": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "gender": {
+                    "type": "string"
+                },
+                "birthdate": {
+                    "type": "string",
+                    "format": "date"
+                }
+            },
+            "required": [
+                "fullName",
+                "email",
+                "gender",
+                "birthdate"
+            ]
+        },
+        "customerResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "fullName": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "gender": {
+                    "type": "string"
+                },
+                "birthdate": {
+                    "type": "string",
+                    "format": "date"
+                },
+                "createdAt": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "updatedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": [
+                "id",
+                "fullName",
+                "email",
+                "gender",
+                "birthdate"
+            ]
+        },
+        "error": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "error"
+            ]
+        }
+    },
+    "components": {
+        "badRequest": {
+            "description": "Requisição inválida",
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "$ref": "#/schemas/error"
+                    }
+                }
+            }
+        },
+        "forbidden": {
+            "description": "Acesso negado",
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "$ref": "#/schemas/error"
+                    }
+                }
+            }
+        },
+        "serverError": {
+            "description": "Erro interno no servidor",
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "$ref": "#/schemas/error"
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer"
+            }
+        }
+    }
+}

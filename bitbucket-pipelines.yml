@@ -30,8 +30,8 @@ pipelines:
             - BRANCH_NAME=$(awk '{print $2}' $BITBUCKET_CLONE_DIR/tempBranchNameFile | cut -d'/' -f 2 | sed -e 's/[^A-Za-z0-9]//g' | tr '[:upper:]' '[:lower:]')
             - echo The parsed name is ${BRANCH_NAME}
             - BRANCH_NAME_LENGTH=${#BRANCH_NAME}
-            - echo The total branch name cannot be more than 10 characters. The actual size is ${BRANCH_NAME_LENGTH} characters.
-            - if [ $BRANCH_NAME_LENGTH -gt 10 ]; then exit 1; else echo The resources will be created with the name ${BRANCH_NAME}; fi
+            - echo The total branch name cannot be more than 20 characters. The actual size is ${BRANCH_NAME_LENGTH} characters.
+            - if [ $BRANCH_NAME_LENGTH -gt 20 ]; then exit 1; else echo The resources will be created with the name ${BRANCH_NAME}; fi
 
             # Provision Terraform resources
             - cd ${BITBUCKET_CLONE_DIR}/devops/terraform
@@ -76,9 +76,14 @@ pipelines:
             - echo Installing NPM dependencies
             - npm install
 
+            - BRANCH_NAME=$(awk '/branch_name/ {print $2}' ${BITBUCKET_CLONE_DIR}/outputs)
+
+            # Create domain
+            - echo Create Domain API
+            - ./node_modules/.bin/sls create_domain --stage $BRANCH_NAME
+
             # Deploy APIs
             - echo Deploy APIs
-            - BRANCH_NAME=$(awk '/branch_name/ {print $2}' ${BITBUCKET_CLONE_DIR}/outputs)
             - ./node_modules/.bin/sls deploy -v -s ${BRANCH_NAME}
           artifacts:
             - outputs
@@ -141,6 +146,12 @@ pipelines:
             - echo Installing NPM dependencies
             - npm install
 
+            - BRANCH_NAME=$(awk '/branch_name/ {print $2}' ${BITBUCKET_CLONE_DIR}/outputs)
+
+            # Create domain
+            - echo Create Domain API
+            - ./node_modules/.bin/sls create_domain --stage $BRANCH_NAME
+
             # Deploy APIs
             - echo Deploy APIs
             - ./node_modules/.bin/sls deploy -v -s stage
@@ -199,6 +210,12 @@ pipelines:
             # Install dependencies
             - echo Installing NPM dependencies
             - npm install
+
+            - BRANCH_NAME=$(awk '/branch_name/ {print $2}' ${BITBUCKET_CLONE_DIR}/outputs)
+
+            # Create domain
+            - echo Create Domain API
+            - ./node_modules/.bin/sls create_domain --stage $BRANCH_NAME
 
             # Deploy APIs
             - echo Deploy APIs

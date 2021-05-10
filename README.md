@@ -1,15 +1,15 @@
-# Consumer API
+# customer API
 
 ## What is this repository for? ###
 
-This API allows to create, update, delete and list consumers. It allows search consumers by list API using search query param.
+This API allows to create, update, delete and list customers. It allows search customers by list API using search query param.
 
 ## APIs built
 
-1. [Save consumer](./requirements/save-consumer.md)
-2. [Load consumer by id](./requirements/load-consumer-by-id.md)
-3. [List consumers](./requirements/list-consumers.md)
-4. [Delete consumer by id](./requirements/delete-consumer-by-id.md)
+1. [Save customer](./requirements/save-customer.md)
+2. [Load customer by id](./requirements/load-customer-by-id.md)
+3. [List customers](./requirements/list-customers.md)
+4. [Delete customer by id](./requirements/delete-customer-by-id.md)
 
 ## How do I get set up? ###
 

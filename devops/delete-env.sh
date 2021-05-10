@@ -1,6 +1,10 @@
 #!/bin/bash
 # How to use: BRANCH_NAME=sc2002 sh delete-env.sh
 cd ..
+
+echo Destroying domain on Route53 for branch API $BRANCH_NAME
+sls delete_domain --stage $BRANCH_NAME
+
 echo Destroying APIs and Lambdas
 sls remove -v -s $BRANCH_NAME
 
