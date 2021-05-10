@@ -22,7 +22,7 @@ const makeSut = (): SutTypes => {
   }
 }
 
-describe('customerSchema', () => {
+describe('CustomerSchema', () => {
   validateUUIDField('id', { ...makeSut(), isRequired: false })
   validateTextField('fullName', { min: 3, max: 255, ...makeSut() })
   validateEmailField('email', makeSut())
