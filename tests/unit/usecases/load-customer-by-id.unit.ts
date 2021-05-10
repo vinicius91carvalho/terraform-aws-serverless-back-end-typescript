@@ -37,7 +37,7 @@ describe('LoadCustomerById', () => {
 
   test('Should return a customer if FindCustomerByIdRepository succedds', async () => {
     const { sut, findCustomerByIdRepositorySpy } = makeSut()
-    const costumer = await sut.execute(faker.datatype.uuid())
-    expect(findCustomerByIdRepositorySpy.result).toEqual(costumer)
+    const customer = await sut.execute(faker.datatype.uuid())
+    expect(findCustomerByIdRepositorySpy.result).toEqual(customer)
   })
 })
