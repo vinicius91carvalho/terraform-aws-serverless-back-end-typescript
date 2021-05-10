@@ -1,5 +1,5 @@
 import { LoadCustomerByIdController } from '@/presentation/controllers/load-customer-by-id-controller'
-import { badRequest, noContent, serverError } from '@/presentation/helpers/http-helpers'
+import { badRequest, noContent, ok, serverError } from '@/presentation/helpers/http-helpers'
 import { HttpRequest } from '@/presentation/protocols/http-protocols'
 import { LoadCustomerByIdValidatorSpy } from '@/tests/unit/presentation/mocks/customer-mock'
 import { LoadCustomerByIdUseCaseSpy } from '@/tests/unit/presentation/mocks/load-customer-by-id-use-case-mock'
@@ -72,5 +72,12 @@ describe('LoadCustomerByIdController', () => {
     loadCustomerByIdUseCaseSpy.result = Promise.resolve(null)
     const httpResponse = await sut.handle(fakeRequest)
     expect(httpResponse).toEqual(noContent())
+  })
+
+  test('Should return 200 if LoadCustomerByIdUseCase succeeds', async () => {
+    const { sut, fakeRequest, loadCustomerByIdUseCaseSpy } = makeSut()
+    const customer = await loadCustomerByIdUseCaseSpy.result
+    const httpResponse = await sut.handle(fakeRequest)
+    expect(httpResponse).toEqual(ok(customer))
   })
 })
