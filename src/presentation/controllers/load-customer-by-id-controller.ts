@@ -1,4 +1,4 @@
-import { badRequest, serverError } from '@/presentation/helpers/http-helpers'
+import { badRequest, noContent, serverError } from '@/presentation/helpers/http-helpers'
 import Controller from '@/presentation/protocols/controller-protocol'
 import { HttpRequest, HttpResponse } from '@/presentation/protocols/http-protocols'
 import { LoadCustomerByIdUseCase } from '@/presentation/protocols/usecases/load-customer-by-id-use-case'
@@ -17,7 +17,10 @@ export class LoadCustomerByIdController implements Controller {
       if (schemaValidationError) {
         return badRequest(schemaValidationError)
       }
-      await this.loadCustomerByIdUseCase.execute(customerId)
+      const customerFound = await this.loadCustomerByIdUseCase.execute(customerId)
+      if (!customerFound) {
+        return noContent()
+      }
       return null
     } catch (error) {
       return serverError(error)
