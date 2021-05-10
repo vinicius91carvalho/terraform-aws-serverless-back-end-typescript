@@ -1,4 +1,4 @@
-import { badRequest, noContent, serverError } from '@/presentation/helpers/http-helpers'
+import { badRequest, noContent, ok, serverError } from '@/presentation/helpers/http-helpers'
 import Controller from '@/presentation/protocols/controller-protocol'
 import { HttpRequest, HttpResponse } from '@/presentation/protocols/http-protocols'
 import { LoadCustomerByIdUseCase } from '@/presentation/protocols/usecases/load-customer-by-id-use-case'
@@ -21,7 +21,7 @@ export class LoadCustomerByIdController implements Controller {
       if (!customerFound) {
         return noContent()
       }
-      return null
+      return ok(customerFound)
     } catch (error) {
       return serverError(error)
     }
