@@ -1,5 +1,5 @@
-import { HttpResponse } from '@/presentation/protocols/http-protocols'
+import { HttpRequest, HttpResponse } from '@/presentation/protocols/http-protocols'
 
 export default interface Controller {
-  handle: (httpRequest?: any) => Promise<HttpResponse>
+  handle: (httpRequest?: HttpRequest<any>) => Promise<HttpResponse>
 }
