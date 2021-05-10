@@ -40,8 +40,9 @@ const makeSut = (): SutTypes => {
 describe('LoadCustomerByIdController', () => {
   test('Should call validator with correct values', async () => {
     const { sut, loadCustomerByIdValidatorSpy, fakeRequest } = makeSut()
+    const customerId = fakeRequest.pathParameters.customerId
     await sut.handle(fakeRequest)
-    expect(loadCustomerByIdValidatorSpy.params).toEqual(fakeRequest.pathParameters.customerId)
+    expect(loadCustomerByIdValidatorSpy.params).toEqual({ customerId })
   })
 
   test('Should return 500 if validator throws an error', async () => {

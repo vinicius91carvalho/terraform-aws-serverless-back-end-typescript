@@ -6,14 +6,14 @@ import { Validator } from '@/validation/validator-protocol'
 
 export class LoadCustomerByIdController implements Controller {
   constructor (
-    private readonly loadCustomerByIdValidator: Validator<string>,
+    private readonly loadCustomerByIdValidator: Validator<any>,
     private readonly loadCustomerByIdUseCase: LoadCustomerByIdUseCase
   ) {}
 
   async handle (httpRequest: HttpRequest<void>): Promise<HttpResponse> {
     try {
       const customerId = httpRequest.pathParameters.customerId
-      const schemaValidationError = await this.loadCustomerByIdValidator.validate(customerId)
+      const schemaValidationError = await this.loadCustomerByIdValidator.validate({ customerId })
       if (schemaValidationError) {
         return badRequest(schemaValidationError)
       }
