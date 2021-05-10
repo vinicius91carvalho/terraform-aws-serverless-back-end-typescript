@@ -28,4 +28,16 @@ describe('LoadCustomerById', () => {
     await sut.execute(customerId)
     expect(findCustomerByIdRepositorySpy.params).toEqual(customerId)
   })
+
+  test('Should throw if FindCustomerByIdRepository throws', async () => {
+    const { sut, findCustomerByIdRepositorySpy } = makeSut()
+    jest.spyOn(findCustomerByIdRepositorySpy, 'findById').mockRejectedValueOnce(new Error())
+    await expect(sut.execute(faker.datatype.uuid())).rejects.toThrowError()
+  })
+
+  test('Should return a customer if FindCustomerByIdRepository succedds', async () => {
+    const { sut, findCustomerByIdRepositorySpy } = makeSut()
+    const costumer = await sut.execute(faker.datatype.uuid())
+    expect(findCustomerByIdRepositorySpy.result).toEqual(costumer)
+  })
 })
