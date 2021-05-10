@@ -4,10 +4,10 @@ import { buildCustomerDTOFake } from '@/tests/shared/mocks/customer-dto-mock'
 
 export class LoadCustomerByIdUseCaseSpy implements LoadCustomerByIdUseCase {
   params: string
-  result: Customer | null
+  result: Promise<Customer | null> = Promise.resolve(buildCustomerDTOFake())
 
   async execute (customerId: string): Promise<Customer | null> {
     this.params = customerId
-    return this.result || buildCustomerDTOFake()
+    return this.result
   }
 }
