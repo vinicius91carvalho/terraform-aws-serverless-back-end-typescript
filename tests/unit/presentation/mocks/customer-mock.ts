@@ -11,3 +11,13 @@ export class CustomerValidatorSpy implements Validator<CustomerDTO> {
     return this.result
   }
 }
+
+export class LoadCustomerByIdValidatorSpy implements Validator<string> {
+  params?: string
+  result: Promise<ValidationSchemaError | undefined> = Promise.resolve(undefined)
+
+  async validate (value: string): Promise<ValidationSchemaError | undefined> {
+    this.params = value
+    return this.result
+  }
+}
