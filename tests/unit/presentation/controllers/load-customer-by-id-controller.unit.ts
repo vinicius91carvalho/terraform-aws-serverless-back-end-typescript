@@ -1,7 +1,8 @@
 import { LoadCustomerByIdController } from '@/presentation/controllers/load-customer-by-id-controller'
-import { serverError } from '@/presentation/helpers/http-helpers'
+import { badRequest, serverError } from '@/presentation/helpers/http-helpers'
 import { HttpRequest } from '@/presentation/protocols/http-protocols'
 import { LoadCustomerByIdValidatorSpy } from '@/tests/unit/presentation/mocks/customer-mock'
+import { ValidationSchemaError } from '@/validation/validator-schema-error'
 import faker from 'faker'
 
 type SutTypes = {
@@ -45,5 +46,14 @@ describe('LoadCustomerByIdController', () => {
     jest.spyOn(loadCustomerByIdValidatorSpy, 'validate').mockRejectedValueOnce(new Error())
     const httpResponse = await sut.handle(fakeRequest)
     expect(httpResponse).toEqual(serverError(new Error()))
+  })
+
+  test('Should return 400 if validator returns an ValidationSchemaError', async () => {
+    const { sut, loadCustomerByIdValidatorSpy, fakeRequest } = makeSut()
+    await sut.handle(fakeRequest)
+    const schemaError = new ValidationSchemaError([])
+    loadCustomerByIdValidatorSpy.result = Promise.resolve(schemaError)
+    const httpResponse = await sut.handle(fakeRequest)
+    expect(httpResponse).toEqual(badRequest(schemaError))
   })
 })
