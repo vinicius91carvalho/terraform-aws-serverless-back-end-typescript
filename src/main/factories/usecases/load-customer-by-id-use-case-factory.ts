@@ -1,8 +1,8 @@
 import { makeCustomerDynamoDBRepository } from '@/main/factories/infra/customer-dynamodb-repository-factory'
-import { SaveCustomerUseCase } from '@/presentation/protocols/usecases/save-customer-use-case'
-import { SaveCustomer } from '@/usecases/save-customer'
+import { LoadCustomerByIdUseCase } from '@/presentation/protocols/usecases/load-customer-by-id-use-case'
+import { LoadCustomerById } from '@/usecases/load-customer-by-id'
 
-export const makeSaveCustomerUseCase = (): SaveCustomerUseCase => {
+export const makeLoadCustomerByIdUseCase = (): LoadCustomerByIdUseCase => {
   const customerDynamoDBRepository = makeCustomerDynamoDBRepository()
-  return new SaveCustomer(customerDynamoDBRepository, customerDynamoDBRepository)
+  return new LoadCustomerById(customerDynamoDBRepository)
 }
