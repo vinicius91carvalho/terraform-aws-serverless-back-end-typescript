@@ -2,6 +2,7 @@ import { LoadCustomerByIdController } from '@/presentation/controllers/load-cust
 import { badRequest, serverError } from '@/presentation/helpers/http-helpers'
 import { HttpRequest } from '@/presentation/protocols/http-protocols'
 import { LoadCustomerByIdValidatorSpy } from '@/tests/unit/presentation/mocks/customer-mock'
+import { LoadCustomerByIdUseCaseSpy } from '@/tests/unit/presentation/mocks/load-customer-by-id-use-case-mock'
 import { ValidationSchemaError } from '@/validation/validator-schema-error'
 import faker from 'faker'
 
@@ -9,11 +10,13 @@ type SutTypes = {
   sut: LoadCustomerByIdController
   fakeRequest: HttpRequest<void>
   loadCustomerByIdValidatorSpy: LoadCustomerByIdValidatorSpy
+  loadCustomerByIdUseCaseSpy: LoadCustomerByIdUseCaseSpy
 }
 
 const makeSut = (): SutTypes => {
   const loadCustomerByIdValidatorSpy = new LoadCustomerByIdValidatorSpy()
-  const sut = new LoadCustomerByIdController(loadCustomerByIdValidatorSpy)
+  const loadCustomerByIdUseCaseSpy = new LoadCustomerByIdUseCaseSpy()
+  const sut = new LoadCustomerByIdController(loadCustomerByIdValidatorSpy, loadCustomerByIdUseCaseSpy)
   const fakeRequest: HttpRequest<void> = {
     user: {
       userEmail: faker.internet.email(),
@@ -29,7 +32,8 @@ const makeSut = (): SutTypes => {
   return {
     sut,
     fakeRequest,
-    loadCustomerByIdValidatorSpy
+    loadCustomerByIdValidatorSpy,
+    loadCustomerByIdUseCaseSpy
   }
 }
 
@@ -55,5 +59,11 @@ describe('LoadCustomerByIdController', () => {
     loadCustomerByIdValidatorSpy.result = Promise.resolve(schemaError)
     const httpResponse = await sut.handle(fakeRequest)
     expect(httpResponse).toEqual(badRequest(schemaError))
+  })
+
+  test('Should call LoadCustomerByIdUseCase with correct value', async () => {
+    const { sut, loadCustomerByIdUseCaseSpy, fakeRequest } = makeSut()
+    await sut.handle(fakeRequest)
+    expect(loadCustomerByIdUseCaseSpy.params).toEqual(fakeRequest.pathParameters.customerId)
   })
 })
