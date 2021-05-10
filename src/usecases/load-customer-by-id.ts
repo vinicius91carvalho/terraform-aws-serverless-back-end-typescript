@@ -6,7 +6,6 @@ export class LoadCustomerById implements LoadCustomerByIdUseCase {
   constructor (private readonly findCustomerByIdRepository: FindCustomerByIdRepository) {}
 
   async execute (customerId: string): Promise<Customer> {
-    await this.findCustomerByIdRepository.findById(customerId)
-    return null
+    return await this.findCustomerByIdRepository.findById(customerId)
   }
 }
