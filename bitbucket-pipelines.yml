@@ -146,11 +146,9 @@ pipelines:
             - echo Installing NPM dependencies
             - npm install
 
-            - BRANCH_NAME=$(awk '/branch_name/ {print $2}' ${BITBUCKET_CLONE_DIR}/outputs)
-
             # Create domain
             - echo Create Domain API
-            - ./node_modules/.bin/sls create_domain --stage $BRANCH_NAME
+            - ./node_modules/.bin/sls create_domain --stage stage
 
             # Deploy APIs
             - echo Deploy APIs
@@ -211,11 +209,9 @@ pipelines:
             - echo Installing NPM dependencies
             - npm install
 
-            - BRANCH_NAME=$(awk '/branch_name/ {print $2}' ${BITBUCKET_CLONE_DIR}/outputs)
-
             # Create domain
             - echo Create Domain API
-            - ./node_modules/.bin/sls create_domain --stage $BRANCH_NAME
+            - ./node_modules/.bin/sls create_domain --stage prod
 
             # Deploy APIs
             - echo Deploy APIs
