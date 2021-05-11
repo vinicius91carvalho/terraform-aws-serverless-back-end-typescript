@@ -1,10 +1,12 @@
 import { Customer } from '@/domain/customer'
 import { CustomerDynamoDBRepository } from '@/infra/dynamodb/customer-dynamodb-repository'
 import { buildFakeCustomer } from '@/tests/shared/mocks/customer-dto-mock'
+import faker from 'faker'
 import getUuid from 'uuid-by-string'
 
 const putSpy = jest.fn()
 const querySpy = jest.fn()
+const scanSpy = jest.fn()
 const deleteSpy = jest.fn()
 
 jest.mock('uuid-by-string', () => {
@@ -16,7 +18,8 @@ jest.mock('aws-sdk', () => ({
     DocumentClient: jest.fn().mockImplementation(() => ({
       put: putSpy,
       query: querySpy,
-      delete: deleteSpy
+      delete: deleteSpy,
+      scan: scanSpy
     }))
   }
 }))
@@ -121,6 +124,44 @@ describe('CustomerDynamoDBRepository', () => {
         }
       }
       expect(deleteSpy).toHaveBeenCalledWith(params)
+    })
+  })
+
+  describe('load()', () => {
+    test('Should call scan method on DocumentClient with correct values', async () => {
+      const { sut, fakeCustomer } = makeSut()
+      scanSpy.mockImplementationOnce(() => ({
+        promise: async () => Promise.resolve({
+          Items: [fakeCustomer]
+        })
+      }))
+      const limit = faker.datatype.number()
+      await sut.load(limit)
+      const params = {
+        TableName: process.env.DYNAMODB_CUSTOMER_TABLE_NAME,
+        Limit: limit
+      }
+      expect(scanSpy).toHaveBeenCalledWith(params)
+    })
+
+    test('Should call scan method on DocumentClient with limit and lastIdOffset', async () => {
+      const { sut, fakeCustomer } = makeSut()
+      scanSpy.mockImplementationOnce(() => ({
+        promise: async () => Promise.resolve({
+          Items: [fakeCustomer]
+        })
+      }))
+      const limit = faker.datatype.number()
+      const lastIdOffset = faker.datatype.uuid()
+      await sut.load(limit, lastIdOffset)
+      const params = {
+        TableName: process.env.DYNAMODB_CUSTOMER_TABLE_NAME,
+        Limit: limit,
+        ExclusiveStartKey: {
+          id: lastIdOffset
+        }
+      }
+      expect(scanSpy).toHaveBeenCalledWith(params)
     })
   })
 })

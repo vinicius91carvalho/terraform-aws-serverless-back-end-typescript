@@ -79,8 +79,8 @@ describe('LoadCustomersController', () => {
 
   test('Should return 200 if LoadCustomersUseCase succeeds', async () => {
     const { sut, fakeRequest, loadCustomersUseCaseSpy } = makeSut()
-    const customers = await loadCustomersUseCaseSpy.result
+    const pagedResult = await loadCustomersUseCaseSpy.result
     const httpResponse = await sut.handle(fakeRequest)
-    expect(httpResponse).toEqual(ok(customers))
+    expect(httpResponse).toEqual(ok(pagedResult))
   })
 })
