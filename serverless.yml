@@ -15,11 +15,19 @@ provider:
     memorySize: 128
     endpointType: regional
     timeout: 5
+    allowedHeaders:
+    - Accept
+    - Content-Type
+    - Content-Length
+    - Authorization
+    - X-Amz-Date
+    - X-Api-Key
+    - X-Amz-Security-Token
+    - X-Amz-User-Agent
     deploymentBucket:
         blockPublicAccess: true
     iamManagedPolicies:
     - 'arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess'
-
 package:
   individually: true
 
@@ -72,6 +80,20 @@ functions:
         - http:
             path: /customers/{customerId}
             method: GET
+            cors: true
+            authorizer:
+                name: authorizer
+                arn: ${ssm:${self:custom.stage}-cognito-user-pool-arn}
+        environment:
+            DYNAMODB_CUSTOMER_TABLE_NAME: ${ssm:${self:custom.stage}-${self:custom.projectName}-dynamodb-customer-name}
+    deleteCustomerById:
+        role: ${ssm:${self:custom.stage}-lambda-dynamodb-iam-role}
+        handler: src/main/handlers/delete-customer-by-id-handler.handler
+        description: Delete a customer by id
+        events:
+        - http:
+            path: /customers/{customerId}
+            method: DELETE
             cors: true
             authorizer:
                 name: authorizer
