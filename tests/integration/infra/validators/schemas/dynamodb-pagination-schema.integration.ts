@@ -11,7 +11,7 @@ type SutTypes = {
 }
 
 const makeSut = (): SutTypes => {
-  const sut = createValidatorAdapter(SchemaFactory.buildPaginationSchema())
+  const sut = createValidatorAdapter(SchemaFactory.buildDynamoDBPaginationSchema())
   return {
     sut,
     objectToValidate: {
@@ -21,7 +21,7 @@ const makeSut = (): SutTypes => {
   }
 }
 
-describe('PaginationSchema', () => {
+describe('DynamoDBPaginationSchema', () => {
   validateNumberField('limit', { min: 0, ...makeSut() })
   validateUUIDField('lastIdOffset', { ...makeSut(), isRequired: false })
 })

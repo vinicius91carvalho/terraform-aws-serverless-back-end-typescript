@@ -1,7 +1,8 @@
 
 import { createCustomerIdSchema } from '@/infra/validators/joi/schemas/customer-id-schema'
 import { createCustomerSchema } from '@/infra/validators/joi/schemas/customer-schema'
-import { createPaginationSchema } from '@/infra/validators/joi/schemas/pagination-schema'
+import { createDynamoDBPaginationSchema } from '@/infra/validators/joi/schemas/dynamodb-pagination-schema'
+import { createElasticSearchPaginationSchema } from '@/infra/validators/joi/schemas/elasticsearch-pagination-schema'
 import Joi from 'joi'
 
 const buildCustomerSchema = (): Joi.ObjectSchema<any> => {
@@ -12,12 +13,17 @@ const buildCustomerIdSchema = (): Joi.ObjectSchema<any> => {
   return createCustomerIdSchema()
 }
 
-const buildPaginationSchema = (): Joi.ObjectSchema<any> => {
-  return createPaginationSchema()
+const buildDynamoDBPaginationSchema = (): Joi.ObjectSchema<any> => {
+  return createDynamoDBPaginationSchema()
+}
+
+const buildElasticSearchPaginationSchema = (): Joi.ObjectSchema<any> => {
+  return createElasticSearchPaginationSchema()
 }
 
 export const SchemaFactory = {
   buildCustomerSchema,
   buildCustomerIdSchema,
-  buildPaginationSchema
+  buildDynamoDBPaginationSchema,
+  buildElasticSearchPaginationSchema
 }
