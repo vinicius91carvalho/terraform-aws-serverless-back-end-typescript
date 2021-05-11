@@ -1,23 +1,27 @@
-import { LoadCustomerByIdController } from '@/presentation/controllers/load-customer-by-id-controller'
+
+import { DeleteCustomerByIdController } from '@/presentation/controllers/delete-customer-by-id-controller'
 import { NotFoundError } from '@/presentation/errors/not-found-error'
-import { badRequest, notFound, ok, serverError } from '@/presentation/helpers/http-helpers'
+import { badRequest, noContent, notFound, serverError } from '@/presentation/helpers/http-helpers'
 import { HttpRequest } from '@/presentation/protocols/http-protocols'
-import { LoadCustomerByIdValidatorSpy } from '@/tests/unit/presentation/mocks/customer-mock'
+import { DeleteCustomerByIdValidatorSpy } from '@/tests/unit/presentation/mocks/customer-mock'
+import { DeleteCustomerByIdUseCaseSpy } from '@/tests/unit/presentation/mocks/delete-customer-by-id-use-case-mock'
 import { LoadCustomerByIdUseCaseSpy } from '@/tests/unit/presentation/mocks/load-customer-by-id-use-case-mock'
 import { ValidationSchemaError } from '@/validation/validator-schema-error'
 import faker from 'faker'
 
 type SutTypes = {
-  sut: LoadCustomerByIdController
+  sut: DeleteCustomerByIdController
   fakeRequest: HttpRequest<void>
-  loadCustomerByIdValidatorSpy: LoadCustomerByIdValidatorSpy
+  deleteCustomerByIdValidatorSpy: DeleteCustomerByIdValidatorSpy
   loadCustomerByIdUseCaseSpy: LoadCustomerByIdUseCaseSpy
+  deleteCustomerByIdUseCaseSpy: DeleteCustomerByIdUseCaseSpy
 }
 
 const makeSut = (): SutTypes => {
-  const loadCustomerByIdValidatorSpy = new LoadCustomerByIdValidatorSpy()
+  const deleteCustomerByIdValidatorSpy = new DeleteCustomerByIdValidatorSpy()
   const loadCustomerByIdUseCaseSpy = new LoadCustomerByIdUseCaseSpy()
-  const sut = new LoadCustomerByIdController(loadCustomerByIdValidatorSpy, loadCustomerByIdUseCaseSpy)
+  const deleteCustomerByIdUseCaseSpy = new DeleteCustomerByIdUseCaseSpy()
+  const sut = new DeleteCustomerByIdController(deleteCustomerByIdValidatorSpy, loadCustomerByIdUseCaseSpy, deleteCustomerByIdUseCaseSpy)
   const fakeRequest: HttpRequest<void> = {
     user: {
       userEmail: faker.internet.email(),
@@ -33,32 +37,33 @@ const makeSut = (): SutTypes => {
   return {
     sut,
     fakeRequest,
-    loadCustomerByIdValidatorSpy,
-    loadCustomerByIdUseCaseSpy
+    deleteCustomerByIdValidatorSpy,
+    loadCustomerByIdUseCaseSpy,
+    deleteCustomerByIdUseCaseSpy
   }
 }
 
-describe('LoadCustomerByIdController', () => {
+describe('DeleteCustomerByIdController', () => {
   test('Should call validator with correct values', async () => {
-    const { sut, loadCustomerByIdValidatorSpy, fakeRequest } = makeSut()
+    const { sut, deleteCustomerByIdValidatorSpy, fakeRequest } = makeSut()
     const customerId = fakeRequest.pathParameters.customerId
     await sut.handle(fakeRequest)
-    expect(loadCustomerByIdValidatorSpy.params).toEqual({ customerId })
+    expect(deleteCustomerByIdValidatorSpy.params).toEqual({ customerId })
   })
 
   test('Should return 500 if validator throws an error', async () => {
-    const { sut, loadCustomerByIdValidatorSpy, fakeRequest } = makeSut()
+    const { sut, deleteCustomerByIdValidatorSpy, fakeRequest } = makeSut()
     await sut.handle(fakeRequest)
-    jest.spyOn(loadCustomerByIdValidatorSpy, 'validate').mockRejectedValueOnce(new Error())
+    jest.spyOn(deleteCustomerByIdValidatorSpy, 'validate').mockRejectedValueOnce(new Error())
     const httpResponse = await sut.handle(fakeRequest)
     expect(httpResponse).toEqual(serverError(new Error()))
   })
 
   test('Should return 400 if validator returns an ValidationSchemaError', async () => {
-    const { sut, loadCustomerByIdValidatorSpy, fakeRequest } = makeSut()
+    const { sut, deleteCustomerByIdValidatorSpy, fakeRequest } = makeSut()
     await sut.handle(fakeRequest)
     const schemaError = new ValidationSchemaError([])
-    loadCustomerByIdValidatorSpy.result = Promise.resolve(schemaError)
+    deleteCustomerByIdValidatorSpy.result = Promise.resolve(schemaError)
     const httpResponse = await sut.handle(fakeRequest)
     expect(httpResponse).toEqual(badRequest(schemaError))
   })
@@ -76,10 +81,15 @@ describe('LoadCustomerByIdController', () => {
     expect(httpResponse).toEqual(notFound(new NotFoundError()))
   })
 
-  test('Should return 200 if LoadCustomerByIdUseCase succeeds', async () => {
-    const { sut, fakeRequest, loadCustomerByIdUseCaseSpy } = makeSut()
-    const customer = await loadCustomerByIdUseCaseSpy.result
+  test('Should call DeleteCustomerByIdUseCase with correct value', async () => {
+    const { sut, deleteCustomerByIdUseCaseSpy, fakeRequest } = makeSut()
+    await sut.handle(fakeRequest)
+    expect(deleteCustomerByIdUseCaseSpy.params).toEqual(fakeRequest.pathParameters.customerId)
+  })
+
+  test('Should return 204 if DeleteCustomerByIdController succeeds', async () => {
+    const { sut, fakeRequest } = makeSut()
     const httpResponse = await sut.handle(fakeRequest)
-    expect(httpResponse).toEqual(ok(customer))
+    expect(httpResponse).toEqual(noContent())
   })
 })
