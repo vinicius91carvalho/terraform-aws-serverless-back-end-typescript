@@ -80,8 +80,8 @@ describe('SearchCustomersController', () => {
 
   test('Should return 200 if SearchCustomersUseCase succeeds', async () => {
     const { sut, fakeRequest, searchCustomersUseCaseSpy } = makeSut()
-    const dynamoDBPagedResult = await searchCustomersUseCaseSpy.result
+    const limitedPagedResult = await searchCustomersUseCaseSpy.result
     const httpResponse = await sut.handle(fakeRequest)
-    expect(httpResponse).toEqual(ok(dynamoDBPagedResult))
+    expect(httpResponse).toEqual(ok(limitedPagedResult))
   })
 })

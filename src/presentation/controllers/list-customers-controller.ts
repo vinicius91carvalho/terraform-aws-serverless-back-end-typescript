@@ -17,9 +17,9 @@ export class ListCustomersController implements Controller {
       if (schemaValidationError) {
         return badRequest(schemaValidationError)
       }
-      const dynamoDBPagedResult = await this.listCustomersUseCase.execute(limit, lastIdOffset)
-      if (dynamoDBPagedResult?.items?.length > 0) {
-        return ok(dynamoDBPagedResult)
+      const limitedPagedResult = await this.listCustomersUseCase.execute(limit, lastIdOffset)
+      if (limitedPagedResult?.items?.length > 0) {
+        return ok(limitedPagedResult)
       }
       return noContent()
     } catch (error) {

@@ -11,7 +11,7 @@ type SutTypes = {
 }
 
 const makeSut = (): SutTypes => {
-  const sut = createValidatorAdapter(SchemaFactory.buildElasticSearchPaginationSchema())
+  const sut = createValidatorAdapter(SchemaFactory.buildCompletePaginationSchema())
   return {
     sut,
     objectToValidate: {
@@ -22,7 +22,7 @@ const makeSut = (): SutTypes => {
   }
 }
 
-describe('ElasticSearchPaginationSchema', () => {
+describe('CompletePaginationSchema', () => {
   validateNumberField('limit', { min: 0, ...makeSut() })
   validateNumberField('offset', { min: 0, ...makeSut(), isRequired: false })
   validateTextField('textToSearch', { min: 3, max: 255, ...makeSut() })

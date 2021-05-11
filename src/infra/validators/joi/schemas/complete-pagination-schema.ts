@@ -1,6 +1,6 @@
 import Joi from 'joi'
 
-export const createElasticSearchPaginationSchema = (): Joi.ObjectSchema => {
+export const createCompletePaginationSchema = (): Joi.ObjectSchema => {
   return Joi.object({
     limit: Joi.number().min(0).required(),
     offset: Joi.number().min(0),

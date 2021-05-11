@@ -1,15 +1,10 @@
 import { Customer } from '@/domain/customer'
-import { SearchCustomersUseCase, SearchCustomersUseCaseParams } from '@/presentation/protocols/usecases/search-customers-use-case'
 import { CompletePagedResult } from '@/shared/complete-paged-result'
 import { buildFakeCustomers } from '@/tests/shared/mocks/customer-dto-mock'
+import { SearchCustomersRepository, SearchCustomersRepositoryParams } from '@/usecases/protocols/search-customers-repository'
 
-export class SearchCustomersUseCaseSpy implements SearchCustomersUseCase {
-  params: {
-    textToSearch: string
-    limit: number
-    offset?: number
-  }
-
+export class SearchCustomersRepositorySpy implements SearchCustomersRepository {
+  params: any
   result: Promise<CompletePagedResult<Customer>>
 
   constructor () {
@@ -22,7 +17,7 @@ export class SearchCustomersUseCaseSpy implements SearchCustomersUseCase {
     })
   }
 
-  async execute (params: SearchCustomersUseCaseParams): Promise<CompletePagedResult<Customer>> {
+  async search (params: SearchCustomersRepositoryParams): Promise<CompletePagedResult<Customer>> {
     this.params = params
     return this.result
   }

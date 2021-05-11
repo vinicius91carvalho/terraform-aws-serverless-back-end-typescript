@@ -1,5 +1,5 @@
 import { Customer } from '@/domain/customer'
-import { DynamoDBPagedResult } from '@/shared/dynamodb-paged-result'
+import { LimitedPagedResult } from '@/shared/limited-paged-result'
 import { ListCustomersUseCase } from '@/presentation/protocols/usecases/list-customers-use-case'
 import { buildFakeCustomers } from '@/tests/shared/mocks/customer-dto-mock'
 
@@ -9,7 +9,7 @@ export class ListCustomersUseCaseSpy implements ListCustomersUseCase {
     lastIdOffset?: string
   }
 
-  result: Promise<DynamoDBPagedResult<Customer>>
+  result: Promise<LimitedPagedResult<Customer>>
 
   constructor () {
     const customers = buildFakeCustomers()
@@ -20,7 +20,7 @@ export class ListCustomersUseCaseSpy implements ListCustomersUseCase {
     })
   }
 
-  async execute (limit: number, lastIdOffset?: string): Promise<DynamoDBPagedResult<Customer>> {
+  async execute (limit: number, lastIdOffset?: string): Promise<LimitedPagedResult<Customer>> {
     this.params = {
       limit,
       lastIdOffset

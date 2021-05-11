@@ -17,9 +17,9 @@ export class SearchCustomersController implements Controller {
       if (schemaValidationError) {
         return badRequest(schemaValidationError)
       }
-      const elasticSearchPagedResult = await this.searchCustomersUseCase.execute({ limit, offset, textToSearch })
-      if (elasticSearchPagedResult?.items?.length > 0) {
-        return ok(elasticSearchPagedResult)
+      const completePagedResult = await this.searchCustomersUseCase.execute({ limit, offset, textToSearch })
+      if (completePagedResult?.items?.length > 0) {
+        return ok(completePagedResult)
       }
       return noContent()
     } catch (error) {

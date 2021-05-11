@@ -1,5 +1,5 @@
 import { Customer } from '@/domain/customer'
-import { ElasticSearchPagedResult } from '@/shared/elasticsearch-paged-result'
+import { CompletePagedResult } from '@/shared/complete-paged-result'
 
 export type SearchCustomersUseCaseParams = {
   textToSearch: string
@@ -7,5 +7,5 @@ export type SearchCustomersUseCaseParams = {
   offset?: number
 }
 export interface SearchCustomersUseCase {
-  execute: (params: SearchCustomersUseCaseParams) => Promise<ElasticSearchPagedResult<Customer>>
+  execute: (params: SearchCustomersUseCaseParams) => Promise<CompletePagedResult<Customer>>
 }
