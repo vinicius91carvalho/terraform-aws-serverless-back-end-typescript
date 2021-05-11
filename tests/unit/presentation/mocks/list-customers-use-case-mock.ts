@@ -1,9 +1,9 @@
 import { Customer } from '@/domain/customer'
 import { PagedResult } from '@/domain/paged-result'
-import { LoadCustomersUseCase } from '@/presentation/protocols/usecases/load-customers-use-case'
+import { ListCustomersUseCase } from '@/presentation/protocols/usecases/list-customers-use-case'
 import { buildFakeCustomers } from '@/tests/shared/mocks/customer-dto-mock'
 
-export class LoadCustomersUseCaseSpy implements LoadCustomersUseCase {
+export class ListCustomersUseCaseSpy implements ListCustomersUseCase {
   params: {
     limit: number
     lastIdOffset?: string

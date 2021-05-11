@@ -1,5 +1,5 @@
 import { Customer } from '@/domain/customer'
 import { PagedResult } from '@/domain/paged-result'
-export interface LoadCustomersUseCase {
+export interface ListCustomersUseCase {
   execute: (limit: number, lastIdOffset?: string) => Promise<PagedResult<Customer>>
 }

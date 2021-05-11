@@ -1,9 +1,9 @@
 import { Customer } from '@/domain/customer'
 import { PagedResult } from '@/domain/paged-result'
 import { buildFakeCustomers } from '@/tests/shared/mocks/customer-dto-mock'
-import { LoadCustomersRepository } from '@/usecases/protocols/load-customers-repository'
+import { ListCustomersRepository } from '@/usecases/protocols/list-customers-repository'
 
-export class LoadCustomersRepositorySpy implements LoadCustomersRepository {
+export class ListCustomersRepositorySpy implements ListCustomersRepository {
   params: any
   result: Promise<PagedResult<Customer>>
 
@@ -16,7 +16,7 @@ export class LoadCustomersRepositorySpy implements LoadCustomersRepository {
     })
   }
 
-  async load (limit: number, lastIdOffset?: string): Promise<PagedResult<Customer>> {
+  async listAll (limit: number, lastIdOffset?: string): Promise<PagedResult<Customer>> {
     this.params = {
       limit,
       lastIdOffset

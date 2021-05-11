@@ -127,7 +127,7 @@ describe('CustomerDynamoDBRepository', () => {
     })
   })
 
-  describe('load()', () => {
+  describe('listAll()', () => {
     test('Should call scan method on DocumentClient with correct values', async () => {
       const { sut, fakeCustomer } = makeSut()
       scanSpy.mockImplementationOnce(() => ({
@@ -136,7 +136,7 @@ describe('CustomerDynamoDBRepository', () => {
         })
       }))
       const limit = faker.datatype.number()
-      await sut.load(limit)
+      await sut.listAll(limit)
       const params = {
         TableName: process.env.DYNAMODB_CUSTOMER_TABLE_NAME,
         Limit: limit
@@ -153,7 +153,7 @@ describe('CustomerDynamoDBRepository', () => {
       }))
       const limit = faker.datatype.number()
       const lastIdOffset = faker.datatype.uuid()
-      await sut.load(limit, lastIdOffset)
+      await sut.listAll(limit, lastIdOffset)
       const params = {
         TableName: process.env.DYNAMODB_CUSTOMER_TABLE_NAME,
         Limit: limit,

@@ -32,7 +32,7 @@ export class DeleteCustomerByIdValidatorSpy implements Validator<any> {
   }
 }
 
-export class LoadCustomersValidatorSpy implements Validator<any> {
+export class ListCustomersValidatorSpy implements Validator<any> {
   params?: any
   result: Promise<ValidationSchemaError | undefined> = Promise.resolve(undefined)
 
