@@ -5,6 +5,7 @@ import getUuid from 'uuid-by-string'
 
 const putSpy = jest.fn()
 const querySpy = jest.fn()
+const deleteSpy = jest.fn()
 
 jest.mock('uuid-by-string', () => {
   return () => 'uuid'
@@ -14,7 +15,8 @@ jest.mock('aws-sdk', () => ({
   DynamoDB: {
     DocumentClient: jest.fn().mockImplementation(() => ({
       put: putSpy,
-      query: querySpy
+      query: querySpy,
+      delete: deleteSpy
     }))
   }
 }))
@@ -102,6 +104,23 @@ describe('CustomerDynamoDBRepository', () => {
         }
       }
       expect(querySpy).toHaveBeenCalledWith(params)
+    })
+  })
+
+  describe('deleteById()', () => {
+    test('Should call delete method on DocumentClient with correct values', async () => {
+      const { sut, fakeCustomer } = makeSut()
+      deleteSpy.mockImplementationOnce(() => ({
+        promise: async () => Promise.resolve()
+      }))
+      await sut.deleteById(fakeCustomer.id)
+      const params = {
+        TableName: process.env.DYNAMODB_CUSTOMER_TABLE_NAME,
+        Key: {
+          id: fakeCustomer.id
+        }
+      }
+      expect(deleteSpy).toHaveBeenCalledWith(params)
     })
   })
 })
