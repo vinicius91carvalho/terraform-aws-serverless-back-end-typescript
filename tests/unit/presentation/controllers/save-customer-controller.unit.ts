@@ -3,7 +3,7 @@ import { CustomerDTO } from '@/presentation/dtos/customer-dto'
 import { EmailInUseError } from '@/presentation/errors/email-in-use-error'
 import { badRequest, created, forbidden, ok, serverError } from '@/presentation/helpers/http-helpers'
 import { HttpRequest } from '@/presentation/protocols/http-protocols'
-import { buildCustomerDTOFake } from '@/tests/shared/mocks/customer-dto-mock'
+import { buildFakeCustomer } from '@/tests/shared/mocks/customer-dto-mock'
 import { CustomerValidatorSpy } from '@/tests/unit/presentation/mocks/customer-mock'
 import { SaveCustomerUseCaseSpy } from '@/tests/unit/presentation/mocks/save-customer-use-case-mock'
 import { ValidationSchemaError } from '@/validation/validator-schema-error'
@@ -28,7 +28,7 @@ const makeSut = (): SutTypes => {
     path: '/any-path',
     pathParameters: {},
     queryStringParameters: {},
-    body: buildCustomerDTOFake()
+    body: buildFakeCustomer()
   }
   return {
     sut,

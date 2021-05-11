@@ -15,15 +15,6 @@ provider:
     memorySize: 128
     endpointType: regional
     timeout: 5
-    allowedHeaders:
-    - Accept
-    - Content-Type
-    - Content-Length
-    - Authorization
-    - X-Amz-Date
-    - X-Api-Key
-    - X-Amz-Security-Token
-    - X-Amz-User-Agent
     deploymentBucket:
         blockPublicAccess: true
     iamManagedPolicies:
@@ -45,6 +36,15 @@ custom:
         includeModules:
             forceExclude:
                 - aws-sdk
+    allowedHeaders:
+        - Accept
+        - Content-Type
+        - Content-Length
+        - Authorization
+        - X-Amz-Date
+        - X-Api-Key
+        - X-Amz-Security-Token
+        - X-Amz-User-Agent
 
 functions:
     login:
@@ -94,6 +94,23 @@ functions:
         - http:
             path: /customers/{customerId}
             method: DELETE
+            cors:
+                origins:
+                    - "*"
+                headers: ${self:custom.allowedHeaders}
+            authorizer:
+                name: authorizer
+                arn: ${ssm:${self:custom.stage}-cognito-user-pool-arn}
+        environment:
+            DYNAMODB_CUSTOMER_TABLE_NAME: ${ssm:${self:custom.stage}-${self:custom.projectName}-dynamodb-customer-name}
+    loadCustomers:
+        role: ${ssm:${self:custom.stage}-lambda-dynamodb-iam-role}
+        handler: src/main/handlers/load-customers-handler.handler
+        description: Load customers
+        events:
+        - http:
+            path: /customers
+            method: GET
             cors: true
             authorizer:
                 name: authorizer

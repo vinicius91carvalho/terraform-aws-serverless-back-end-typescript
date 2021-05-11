@@ -10,6 +10,7 @@ This API allows to create, update, delete and list customers. It allows search c
 2. [Load customer by id](./requirements/load-customer-by-id.md)
 3. [List customers](./requirements/list-customers.md)
 4. [Delete customer by id](./requirements/delete-customer-by-id.md)
+4. [Search customers](./requirements/search-customers.md)
 
 ## How do I get set up? ###
 
