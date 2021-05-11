@@ -12,21 +12,31 @@ export class CustomerValidatorSpy implements Validator<CustomerDTO> {
   }
 }
 
-export class LoadCustomerByIdValidatorSpy implements Validator<string> {
-  params?: string
+export class LoadCustomerByIdValidatorSpy implements Validator<any> {
+  params?: any
   result: Promise<ValidationSchemaError | undefined> = Promise.resolve(undefined)
 
-  async validate (value: string): Promise<ValidationSchemaError | undefined> {
+  async validate (value: any): Promise<ValidationSchemaError | undefined> {
     this.params = value
     return this.result
   }
 }
 
-export class DeleteCustomerByIdValidatorSpy implements Validator<string> {
-  params?: string
+export class DeleteCustomerByIdValidatorSpy implements Validator<any> {
+  params?: any
   result: Promise<ValidationSchemaError | undefined> = Promise.resolve(undefined)
 
-  async validate (value: string): Promise<ValidationSchemaError | undefined> {
+  async validate (value: any): Promise<ValidationSchemaError | undefined> {
+    this.params = value
+    return this.result
+  }
+}
+
+export class LoadCustomersValidatorSpy implements Validator<any> {
+  params?: any
+  result: Promise<ValidationSchemaError | undefined> = Promise.resolve(undefined)
+
+  async validate (value: any): Promise<ValidationSchemaError | undefined> {
     this.params = value
     return this.result
   }

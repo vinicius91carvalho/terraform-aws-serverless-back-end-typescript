@@ -1,5 +1,5 @@
 import { Customer } from '@/domain/customer'
-import { buildCustomerDTOFake } from '@/tests/shared/mocks/customer-dto-mock'
+import { buildFakeCustomer } from '@/tests/shared/mocks/customer-dto-mock'
 import { FindCustomerByIdRepositorySpy } from '@/tests/unit/usecases/mocks/find-customer-by-id-repository-mock'
 import { LoadCustomerById } from '@/usecases/load-customer-by-id'
 import faker from 'faker'
@@ -12,7 +12,7 @@ type SutTypes = {
 
 const makeSut = (): SutTypes => {
   const findCustomerByIdRepositorySpy = new FindCustomerByIdRepositorySpy()
-  const fakeCustomer = buildCustomerDTOFake()
+  const fakeCustomer = buildFakeCustomer()
   const sut = new LoadCustomerById(findCustomerByIdRepositorySpy)
   return {
     sut,

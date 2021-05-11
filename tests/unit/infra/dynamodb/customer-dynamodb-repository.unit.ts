@@ -1,6 +1,6 @@
 import { Customer } from '@/domain/customer'
 import { CustomerDynamoDBRepository } from '@/infra/dynamodb/customer-dynamodb-repository'
-import { buildCustomerDTOFake } from '@/tests/shared/mocks/customer-dto-mock'
+import { buildFakeCustomer } from '@/tests/shared/mocks/customer-dto-mock'
 import getUuid from 'uuid-by-string'
 
 const putSpy = jest.fn()
@@ -27,7 +27,7 @@ type SutTypes = {
 }
 
 const makeSut = (): SutTypes => {
-  const fakeCustomer = buildCustomerDTOFake()
+  const fakeCustomer = buildFakeCustomer()
   const sut = new CustomerDynamoDBRepository()
   return {
     fakeCustomer,

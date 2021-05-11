@@ -6,7 +6,7 @@ import { validateEmailField } from '@/tests/integration/infra/validators/schemas
 import { validateEnumField } from '@/tests/integration/infra/validators/schemas/utils/enum-field-validation-tests'
 import { validateTextField } from '@/tests/integration/infra/validators/schemas/utils/text-field-validation-tests'
 import { validateUUIDField } from '@/tests/integration/infra/validators/schemas/utils/uuid-field-validation-tests'
-import { buildCustomerDTOFake } from '@/tests/shared/mocks/customer-dto-mock'
+import { buildFakeCustomer } from '@/tests/shared/mocks/customer-dto-mock'
 import { Validator } from '@/validation/validator-protocol'
 
 type SutTypes = {
@@ -18,7 +18,7 @@ const makeSut = (): SutTypes => {
   const sut = createValidatorAdapter(SchemaFactory.buildCustomerSchema())
   return {
     sut,
-    objectToValidate: buildCustomerDTOFake()
+    objectToValidate: buildFakeCustomer()
   }
 }
 

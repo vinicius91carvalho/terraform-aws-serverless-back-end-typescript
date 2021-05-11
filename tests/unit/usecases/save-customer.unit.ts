@@ -1,6 +1,6 @@
 import { Customer } from '@/domain/customer'
 import { EmailInUseError } from '@/presentation/errors/email-in-use-error'
-import { buildCustomerDTOFake } from '@/tests/shared/mocks/customer-dto-mock'
+import { buildFakeCustomer } from '@/tests/shared/mocks/customer-dto-mock'
 import { FindCustomerByEmailRepositorySpy } from '@/tests/unit/usecases/mocks/find-customer-by-email-repository-mock'
 import { SaveCustomerRepositorySpy } from '@/tests/unit/usecases/mocks/save-customer-repository-mock'
 import { SaveCustomer } from '@/usecases/save-customer'
@@ -16,7 +16,7 @@ type SutTypes = {
 const makeSut = (): SutTypes => {
   const findCustomerByEmailRepositorySpy = new FindCustomerByEmailRepositorySpy()
   const saveCustomerRepositorySpy = new SaveCustomerRepositorySpy()
-  const fakeCustomer = buildCustomerDTOFake()
+  const fakeCustomer = buildFakeCustomer()
   const sut = new SaveCustomer(findCustomerByEmailRepositorySpy, saveCustomerRepositorySpy)
   return {
     sut,
@@ -49,7 +49,7 @@ describe('SaveCustomer', () => {
 
   test('Should return EmailInUseError if customer returned from database has different id', async () => {
     const { sut, fakeCustomer, findCustomerByEmailRepositorySpy } = makeSut()
-    findCustomerByEmailRepositorySpy.result = buildCustomerDTOFake()
+    findCustomerByEmailRepositorySpy.result = buildFakeCustomer()
     const result = await sut.execute(fakeCustomer)
     expect(result).toEqual(new EmailInUseError())
   })
