@@ -120,6 +120,53 @@
                         }
                     }
                 }
+            },
+            "get": {
+                "security": [
+                    {
+                    "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "Customer"
+                ],
+                "summary": "List customers",
+                "description": "Allow to list customers",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "schema": {
+                            "type": "number"
+                        },
+                        "required": true,
+                        "description": "Limit the number of results"
+                    },
+                    {
+                        "in": "query",
+                        "name": "lastIdOffset",
+                        "schema": {
+                            "type": "number"
+                        },
+                        "required": false,
+                        "description": "The id of the last item returned to use as a offset in the next query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/schemas/pageResultCustomers"
+                                }
+                            }
+                        }
+                    },
+                    "204": {
+                        "description": "No content"
+                    }
+                }
             }
         },
         "/customers/{customerId}": {
@@ -258,6 +305,22 @@
                 "gender",
                 "birthdate"
             ]
+        },
+        "pageResultCustomers": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "schema": {
+                            "$ref": "#/schemas/customer"
+                        }
+                    }
+                },
+                "lastKey": {
+                    "type": "string"
+                }
+            }
         },
         "customerResponse": {
             "type": "object",
