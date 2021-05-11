@@ -17,11 +17,11 @@ export class LoadCustomersController implements Controller {
       if (schemaValidationError) {
         return badRequest(schemaValidationError)
       }
-      const customers = await this.loadCustomersUseCase.execute(limit, lastIdOffset)
-      if (!customers || customers.length === 0) {
-        return noContent()
+      const pagedResult = await this.loadCustomersUseCase.execute(limit, lastIdOffset)
+      if (pagedResult?.items?.length > 0) {
+        return ok(pagedResult)
       }
-      return ok(customers)
+      return noContent()
     } catch (error) {
       return serverError(error)
     }

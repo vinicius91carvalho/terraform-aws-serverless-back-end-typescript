@@ -1,12 +1,14 @@
 import { Customer } from '@/domain/customer'
+import { PagedResult } from '@/domain/paged-result'
 import { DeleteCustomerByIdRepository } from '@/usecases/protocols/delete-customer-by-id-repository'
 import { FindCustomerByEmailRepository } from '@/usecases/protocols/find-customer-by-email-repository'
 import { FindCustomerByIdRepository } from '@/usecases/protocols/find-customer-by-id-repository'
+import { LoadCustomersRepository } from '@/usecases/protocols/load-customers-repository'
 import { SaveCustomerRepository } from '@/usecases/protocols/save-customer-repository'
 import AWS from 'aws-sdk'
 import getUuid from 'uuid-by-string'
 
-export class CustomerDynamoDBRepository implements SaveCustomerRepository, FindCustomerByEmailRepository, FindCustomerByIdRepository, DeleteCustomerByIdRepository {
+export class CustomerDynamoDBRepository implements SaveCustomerRepository, FindCustomerByEmailRepository, FindCustomerByIdRepository, DeleteCustomerByIdRepository, LoadCustomersRepository {
   private readonly dynamodb: AWS.DynamoDB.DocumentClient
 
   constructor () {
@@ -55,5 +57,20 @@ export class CustomerDynamoDBRepository implements SaveCustomerRepository, FindC
         id
       }
     }).promise()
+  }
+
+  async load (limit: number, lastIdOffset?: string): Promise<PagedResult<Customer>> {
+    const params: AWS.DynamoDB.DocumentClient.ScanInput = {
+      TableName: process.env.DYNAMODB_CUSTOMER_TABLE_NAME,
+      Limit: limit
+    }
+    if (lastIdOffset) {
+      params.ExclusiveStartKey = { id: lastIdOffset }
+    }
+    const response = await this.dynamodb.scan(params).promise()
+    return {
+      items: response.Items as Customer[],
+      lastKey: response.LastEvaluatedKey
+    }
   }
 }
