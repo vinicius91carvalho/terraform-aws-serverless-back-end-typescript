@@ -100,3 +100,17 @@ functions:
                 arn: ${ssm:${self:custom.stage}-cognito-user-pool-arn}
         environment:
             DYNAMODB_CUSTOMER_TABLE_NAME: ${ssm:${self:custom.stage}-${self:custom.projectName}-dynamodb-customer-name}
+    loadCustomers:
+        role: ${ssm:${self:custom.stage}-lambda-dynamodb-iam-role}
+        handler: src/main/handlers/load-customers-handler.handler
+        description: Load customers
+        events:
+        - http:
+            path: /customers
+            method: GET
+            cors: true
+            authorizer:
+                name: authorizer
+                arn: ${ssm:${self:custom.stage}-cognito-user-pool-arn}
+        environment:
+            DYNAMODB_CUSTOMER_TABLE_NAME: ${ssm:${self:custom.stage}-${self:custom.projectName}-dynamodb-customer-name}
