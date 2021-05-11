@@ -1,5 +1,5 @@
+import { Customer } from '@/domain/customer'
 import { SaveCustomerController } from '@/presentation/controllers/save-customer-controller'
-import { CustomerDTO } from '@/presentation/dtos/customer-dto'
 import { EmailInUseError } from '@/presentation/errors/email-in-use-error'
 import { badRequest, created, forbidden, ok, serverError } from '@/presentation/helpers/http-helpers'
 import { HttpRequest } from '@/presentation/protocols/http-protocols'
@@ -11,7 +11,7 @@ import faker from 'faker'
 
 type SutTypes = {
   sut: SaveCustomerController
-  fakeRequest: HttpRequest<CustomerDTO>
+  fakeRequest: HttpRequest<Customer>
   customerValidatorSpy: CustomerValidatorSpy
   saveCustomerUseCaseSpy: SaveCustomerUseCaseSpy
 }
@@ -20,7 +20,7 @@ const makeSut = (): SutTypes => {
   const customerValidatorSpy = new CustomerValidatorSpy()
   const saveCustomerUseCaseSpy = new SaveCustomerUseCaseSpy()
   const sut = new SaveCustomerController(customerValidatorSpy, saveCustomerUseCaseSpy)
-  const fakeRequest: HttpRequest<CustomerDTO> = {
+  const fakeRequest: HttpRequest<Customer> = {
     user: {
       userEmail: faker.internet.email(),
       userGroup: 'admin'

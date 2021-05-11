@@ -6,20 +6,20 @@ import { Validator } from '@/validation/validator-protocol'
 
 export class ListCustomersController implements Controller {
   constructor (
-    private readonly listCustomersValidator: Validator<any>,
+    private readonly listCustomersValidator: Validator,
     private readonly listCustomersUseCase: ListCustomersUseCase
   ) {}
 
   async handle (httpRequest: HttpRequest<void>): Promise<HttpResponse> {
     try {
-      const { limit, lastIdOffset } = httpRequest.queryStringParameters || {}
+      const { limit = 100, lastIdOffset } = httpRequest.queryStringParameters || {}
       const schemaValidationError = await this.listCustomersValidator.validate({ limit, lastIdOffset })
       if (schemaValidationError) {
         return badRequest(schemaValidationError)
       }
-      const pagedResult = await this.listCustomersUseCase.execute(limit, lastIdOffset)
-      if (pagedResult?.items?.length > 0) {
-        return ok(pagedResult)
+      const dynamoDBPagedResult = await this.listCustomersUseCase.execute(limit, lastIdOffset)
+      if (dynamoDBPagedResult?.items?.length > 0) {
+        return ok(dynamoDBPagedResult)
       }
       return noContent()
     } catch (error) {

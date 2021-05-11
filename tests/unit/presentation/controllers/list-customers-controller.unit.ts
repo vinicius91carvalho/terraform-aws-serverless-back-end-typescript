@@ -79,8 +79,8 @@ describe('ListCustomersController', () => {
 
   test('Should return 200 if ListCustomersUseCase succeeds', async () => {
     const { sut, fakeRequest, listCustomersUseCaseSpy } = makeSut()
-    const pagedResult = await listCustomersUseCaseSpy.result
+    const dynamoDBPagedResult = await listCustomersUseCaseSpy.result
     const httpResponse = await sut.handle(fakeRequest)
-    expect(httpResponse).toEqual(ok(pagedResult))
+    expect(httpResponse).toEqual(ok(dynamoDBPagedResult))
   })
 })

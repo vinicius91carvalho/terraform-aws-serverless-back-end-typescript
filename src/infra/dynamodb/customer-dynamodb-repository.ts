@@ -1,5 +1,5 @@
 import { Customer } from '@/domain/customer'
-import { PagedResult } from '@/domain/paged-result'
+import { DynamoDBPagedResult } from '@/shared/dynamodb-paged-result'
 import { DeleteCustomerByIdRepository } from '@/usecases/protocols/delete-customer-by-id-repository'
 import { FindCustomerByEmailRepository } from '@/usecases/protocols/find-customer-by-email-repository'
 import { FindCustomerByIdRepository } from '@/usecases/protocols/find-customer-by-id-repository'
@@ -59,7 +59,7 @@ export class CustomerDynamoDBRepository implements SaveCustomerRepository, FindC
     }).promise()
   }
 
-  async listAll (limit: number, lastIdOffset?: string): Promise<PagedResult<Customer>> {
+  async listAll (limit: number, lastIdOffset?: string): Promise<DynamoDBPagedResult<Customer>> {
     const params: AWS.DynamoDB.DocumentClient.ScanInput = {
       TableName: process.env.DYNAMODB_CUSTOMER_TABLE_NAME,
       Limit: limit

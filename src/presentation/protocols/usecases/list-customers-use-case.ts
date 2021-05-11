@@ -1,5 +1,5 @@
 import { Customer } from '@/domain/customer'
-import { PagedResult } from '@/domain/paged-result'
+import { DynamoDBPagedResult } from '@/shared/dynamodb-paged-result'
 export interface ListCustomersUseCase {
-  execute: (limit: number, lastIdOffset?: string) => Promise<PagedResult<Customer>>
+  execute: (limit: number, lastIdOffset?: string) => Promise<DynamoDBPagedResult<Customer>>
 }

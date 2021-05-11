@@ -1,5 +1,5 @@
 import { ValidationSchemaError } from '@/validation/validator-schema-error'
 
-export interface Validator<T> {
-  validate: (value: T) => Promise<ValidationSchemaError | undefined>
+export interface Validator {
+  validate: (value: any) => Promise<ValidationSchemaError | undefined>
 }

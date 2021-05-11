@@ -1,8 +1,7 @@
-import { GenderEnum } from '@/domain/customer'
-import { CustomerDTO } from '@/presentation/dtos/customer-dto'
+import { Customer, GenderEnum } from '@/domain/customer'
 import faker from 'faker'
 
-export const buildFakeCustomer = (): CustomerDTO => ({
+export const buildFakeCustomer = (): Customer => ({
   id: faker.datatype.uuid(),
   fullName: faker.name.firstName() + ' ' + faker.name.lastName(),
   email: faker.internet.email(),
@@ -10,7 +9,7 @@ export const buildFakeCustomer = (): CustomerDTO => ({
   birthDate: faker.date.past()
 })
 
-export const buildFakeCustomers = (): CustomerDTO[] => ([
+export const buildFakeCustomers = (): Customer[] => ([
   buildFakeCustomer(),
   buildFakeCustomer(),
   buildFakeCustomer()

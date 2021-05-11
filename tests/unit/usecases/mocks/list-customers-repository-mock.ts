@@ -1,11 +1,11 @@
 import { Customer } from '@/domain/customer'
-import { PagedResult } from '@/domain/paged-result'
+import { DynamoDBPagedResult } from '@/shared/dynamodb-paged-result'
 import { buildFakeCustomers } from '@/tests/shared/mocks/customer-dto-mock'
 import { ListCustomersRepository } from '@/usecases/protocols/list-customers-repository'
 
 export class ListCustomersRepositorySpy implements ListCustomersRepository {
   params: any
-  result: Promise<PagedResult<Customer>>
+  result: Promise<DynamoDBPagedResult<Customer>>
 
   constructor () {
     const customers = buildFakeCustomers()
@@ -16,7 +16,7 @@ export class ListCustomersRepositorySpy implements ListCustomersRepository {
     })
   }
 
-  async listAll (limit: number, lastIdOffset?: string): Promise<PagedResult<Customer>> {
+  async listAll (limit: number, lastIdOffset?: string): Promise<DynamoDBPagedResult<Customer>> {
     this.params = {
       limit,
       lastIdOffset

@@ -2,7 +2,7 @@ import { Validator } from '@/validation/validator-protocol'
 import { ValidationSchemaError, ValidationSchemaFieldError } from '@/validation/validator-schema-error'
 import Joi from 'joi'
 
-export class JoiValidatorAdapter implements Validator<any> {
+export class JoiValidatorAdapter implements Validator {
   constructor (private readonly joiSchema: Joi.ObjectSchema<any>) {}
 
   async validate (value: any): Promise<ValidationSchemaError | undefined> {

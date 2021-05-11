@@ -4,7 +4,7 @@ import { Validator } from '@/validation/validator-protocol'
 import jsonpath from 'jsonpath'
 
 type Params = {
-  sut: Validator<any>
+  sut: Validator
   objectToValidate: any
   enumValues: string[]
   path?: string[]

@@ -5,7 +5,7 @@ import jsonpath from 'jsonpath'
 
 type Params = {
   path?: string[]
-  sut: Validator<any>
+  sut: Validator
   objectToValidate: any
 }
 

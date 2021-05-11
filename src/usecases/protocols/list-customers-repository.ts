@@ -1,6 +1,6 @@
 import { Customer } from '@/domain/customer'
-import { PagedResult } from '@/domain/paged-result'
+import { DynamoDBPagedResult } from '@/shared/dynamodb-paged-result'
 
 export interface ListCustomersRepository {
-  listAll: (limit: number, lastIdOffset?: string) => Promise<PagedResult<Customer>>
+  listAll: (limit: number, lastIdOffset?: string) => Promise<DynamoDBPagedResult<Customer>>
 }

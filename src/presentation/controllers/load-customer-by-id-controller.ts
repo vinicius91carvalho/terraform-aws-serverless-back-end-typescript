@@ -7,7 +7,7 @@ import { Validator } from '@/validation/validator-protocol'
 
 export class LoadCustomerByIdController implements Controller {
   constructor (
-    private readonly loadCustomerByIdValidator: Validator<any>,
+    private readonly loadCustomerByIdValidator: Validator,
     private readonly loadCustomerByIdUseCase: LoadCustomerByIdUseCase
   ) {}
 
