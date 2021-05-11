@@ -12,7 +12,7 @@ export class LoadCustomersController implements Controller {
 
   async handle (httpRequest: HttpRequest<void>): Promise<HttpResponse> {
     try {
-      const { limit, lastIdOffset } = httpRequest.queryStringParameters
+      const { limit, lastIdOffset } = httpRequest.queryStringParameters || {}
       const schemaValidationError = await this.loadCustomersValidator.validate({ limit, lastIdOffset })
       if (schemaValidationError) {
         return badRequest(schemaValidationError)
