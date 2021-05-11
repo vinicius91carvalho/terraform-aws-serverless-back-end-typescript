@@ -32,6 +32,11 @@ export const badRequest = (error: Error): HttpResponse => ({
   body: processErrorMessage(error)
 })
 
+export const notFound = (error: Error): HttpResponse => ({
+  statusCode: 404,
+  body: processErrorMessage(error)
+})
+
 export const forbidden = (error: Error): HttpResponse => ({
   statusCode: 403,
   body: processErrorMessage(error)

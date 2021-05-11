@@ -6,7 +6,7 @@
 * ⛔️ Validations
     * ⛔️ Schema fields
         * ⛔️ customerId needs to be a valid UUID
-* ⛔️ Returns **204** with deleted customer
+* ⛔️ Returns **204**
 
 > ## Exception cases
 
