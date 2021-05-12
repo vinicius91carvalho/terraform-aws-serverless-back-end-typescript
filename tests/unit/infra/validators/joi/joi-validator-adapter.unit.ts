@@ -42,6 +42,12 @@ describe('JoiValidatorAdapter', () => {
     expect(validatorSchemaError).toEqual(schemaError)
   })
 
+  test('Should throws if Joi throws an unexpected error', async () => {
+    const { schema, sut } = makeSut()
+    jest.spyOn(schema, 'validateAsync').mockRejectedValueOnce(new Error())
+    await expect(sut.validate({ name: 'wrong_name' })).rejects.toThrowError()
+  })
+
   test('Should returns undefined if validation succeeds', async () => {
     const { sut } = makeSut()
     const result = await sut.validate({
