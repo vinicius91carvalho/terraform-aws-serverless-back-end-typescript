@@ -3,7 +3,7 @@
     "info": {
         "title": "Customer API - Pagaleve Challenge",
         "description": "Customer's API that provides endpoints to fetch customer's data",
-        "version": "1.4.0",
+        "version": "1.5.0",
         "contact": {
             "name": "Vinicius de Almeida Carvalho",
             "email": "vinicius91carvalho@gmail.com",

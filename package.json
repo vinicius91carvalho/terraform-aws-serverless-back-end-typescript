@@ -1,6 +1,6 @@
 {
   "name": "customer-api",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Customer's API that provides endpoints to fetch customer's data",
   "scripts": {
     "prepare": "husky install",
