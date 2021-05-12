@@ -4,11 +4,8 @@ options:
   max-time: 30
 
 definitions:
-    services:
-        docker:
-            memory: 1024
-    caches:
-        npm: $HOME/.npm
+  caches:
+    npm: $HOME/.npm
 
 pipelines:
   branches:
@@ -87,7 +84,7 @@ pipelines:
 
             # Deploy APIs
             - echo Deploy APIs
-            - export NODE_OPTIONS=--max_old_space_size=4096
+            - export NODE_OPTIONS=--max_old_space_size=8192
             - ./node_modules/.bin/sls deploy -v -s ${BRANCH_NAME}
           artifacts:
             - outputs
@@ -156,7 +153,7 @@ pipelines:
 
             # Deploy APIs
             - echo Deploy APIs
-            - export NODE_OPTIONS=--max_old_space_size=4096
+            - export NODE_OPTIONS=--max_old_space_size=8192
             - ./node_modules/.bin/sls deploy -v -s stage
           artifacts:
             - outputs
@@ -220,7 +217,7 @@ pipelines:
 
             # Deploy APIs
             - echo Deploy APIs
-            - export NODE_OPTIONS=--max_old_space_size=4096
+            - export NODE_OPTIONS=--max_old_space_size=8192
             - ./node_modules/.bin/sls deploy -v -s prod
           artifacts:
             - outputs
