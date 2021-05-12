@@ -2,6 +2,6 @@ import { JoiValidatorAdapter } from '@/infra/validators/joi/joi-validator-adapte
 import { Validator } from '@/validation/validator-protocol'
 import Joi from 'joi'
 
-export const createValidatorAdapter = (schema: Joi.ObjectSchema<any>): Validator<any> => {
+export const createValidatorAdapter = (schema: Joi.ObjectSchema<any>): Validator => {
   return new JoiValidatorAdapter(schema)
 }

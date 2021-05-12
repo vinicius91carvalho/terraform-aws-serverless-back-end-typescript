@@ -8,7 +8,7 @@ import { Validator } from '@/validation/validator-protocol'
 
 export class DeleteCustomerByIdController implements Controller {
   constructor (
-    private readonly deleteCustomerByIdValidator: Validator<any>,
+    private readonly deleteCustomerByIdValidator: Validator,
     private readonly loadCustomerByIdUseCase: LoadCustomerByIdUseCase,
     private readonly deleteCustomerByIdUseCase: DeleteCustomerByIdUseCase
   ) {}

@@ -6,12 +6,12 @@ import { Validator } from '@/validation/validator-protocol'
 import faker from 'faker'
 
 type SutTypes = {
-  sut: Validator<any>
+  sut: Validator
   objectToValidate: any
 }
 
 const makeSut = (): SutTypes => {
-  const sut = createValidatorAdapter(SchemaFactory.buildPaginationSchema())
+  const sut = createValidatorAdapter(SchemaFactory.buildDynamoDBPaginationSchema())
   return {
     sut,
     objectToValidate: {
@@ -21,7 +21,7 @@ const makeSut = (): SutTypes => {
   }
 }
 
-describe('PaginationSchema', () => {
+describe('DynamoDBPaginationSchema', () => {
   validateNumberField('limit', { min: 0, ...makeSut() })
   validateUUIDField('lastIdOffset', { ...makeSut(), isRequired: false })
 })

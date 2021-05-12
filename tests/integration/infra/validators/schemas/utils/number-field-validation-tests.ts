@@ -5,7 +5,7 @@ import faker from 'faker'
 import jsonpath from 'jsonpath'
 
 type Params = {
-  sut: Validator<any>
+  sut: Validator
   objectToValidate: any
   path?: string[]
   isRequired?: boolean

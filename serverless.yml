@@ -47,17 +47,6 @@ custom:
         - X-Amz-User-Agent
 
 functions:
-    login:
-        role: ${ssm:${self:custom.stage}-lambda-cognito-iam-role} 
-        handler: src/main/handlers/login-handler.handler
-        events:
-        - http:
-            path: /login
-            method: POST
-            cors: true
-        environment:
-            COGNITO_USER_POOL_ID: ${ssm:${self:custom.stage}-cognito-user-pool-id}
-            COGNITO_CLIENT_ID: ${ssm:${self:custom.stage}-cognito-user-client-id}
     saveCustomer:
         role: ${ssm:${self:custom.stage}-lambda-dynamodb-iam-role}
         handler: src/main/handlers/save-customer-handler.handler
@@ -71,6 +60,7 @@ functions:
                 name: authorizer
                 arn: ${ssm:${self:custom.stage}-cognito-user-pool-arn}
         environment:
+            STAGE: ${self:custom.stage}
             DYNAMODB_CUSTOMER_TABLE_NAME: ${ssm:${self:custom.stage}-${self:custom.projectName}-dynamodb-customer-name}
     loadCustomerById:
         role: ${ssm:${self:custom.stage}-lambda-dynamodb-iam-role}
@@ -102,10 +92,11 @@ functions:
                 name: authorizer
                 arn: ${ssm:${self:custom.stage}-cognito-user-pool-arn}
         environment:
+            STAGE: ${self:custom.stage}
             DYNAMODB_CUSTOMER_TABLE_NAME: ${ssm:${self:custom.stage}-${self:custom.projectName}-dynamodb-customer-name}
-    loadCustomers:
+    listCustomers:
         role: ${ssm:${self:custom.stage}-lambda-dynamodb-iam-role}
-        handler: src/main/handlers/load-customers-handler.handler
+        handler: src/main/handlers/list-customers-handler.handler
         description: Load customers
         events:
         - http:
@@ -117,3 +108,44 @@ functions:
                 arn: ${ssm:${self:custom.stage}-cognito-user-pool-arn}
         environment:
             DYNAMODB_CUSTOMER_TABLE_NAME: ${ssm:${self:custom.stage}-${self:custom.projectName}-dynamodb-customer-name}
+    searchCustomers:
+        role: ${ssm:${self:custom.stage}-lambda-basic-iam-role}
+        handler: src/main/handlers/search-customers-handler.handler
+        description: Search customers
+        events:
+        - http:
+            path: /customers/search
+            method: GET
+            cors: true
+            authorizer:
+                name: authorizer
+                arn: ${ssm:${self:custom.stage}-cognito-user-pool-arn}
+        environment:
+            STAGE: ${self:custom.stage}
+            ALGOLIA_APP_ID: ${ssm:serverless-algolia-app-id}
+            ALGOLIA_ADMIN_API_KEY: ${ssm:serverless-algolia-admin-api-key}
+            ALGOLIA_INDEX_NAME: customer-api-${self:custom.stage}
+    login:
+        role: ${ssm:${self:custom.stage}-lambda-cognito-iam-role} 
+        handler: src/main/handlers/extras/login-handler.handler
+        events:
+        - http:
+            path: /login
+            method: POST
+            cors: true
+        environment:
+            COGNITO_USER_POOL_ID: ${ssm:${self:custom.stage}-cognito-user-pool-id}
+            COGNITO_CLIENT_ID: ${ssm:${self:custom.stage}-cognito-user-client-id}
+    updateAlgoliaIndex:
+        handler: src/main/handlers/extras/update-algolia-index-handler.handler
+        events:
+        - stream:
+            type: dynamodb
+            batchSize: 1
+            startingPosition: LATEST
+            arn: ${ssm:${self:custom.stage}-${self:custom.projectName}-dynamodb-customer-stream-arn}
+        environment:
+            STAGE: ${self:custom.stage}
+            ALGOLIA_APP_ID: ${ssm:serverless-algolia-app-id}
+            ALGOLIA_ADMIN_API_KEY: ${ssm:serverless-algolia-admin-api-key}
+            ALGOLIA_INDEX_NAME: customer-api-${self:custom.stage}

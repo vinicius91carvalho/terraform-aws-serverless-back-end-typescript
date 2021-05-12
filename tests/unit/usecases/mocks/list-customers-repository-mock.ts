@@ -1,15 +1,11 @@
 import { Customer } from '@/domain/customer'
-import { PagedResult } from '@/domain/paged-result'
-import { LoadCustomersUseCase } from '@/presentation/protocols/usecases/load-customers-use-case'
+import { LimitedPagedResult } from '@/shared/limited-paged-result'
 import { buildFakeCustomers } from '@/tests/shared/mocks/customer-dto-mock'
+import { ListCustomersRepository } from '@/usecases/protocols/list-customers-repository'
 
-export class LoadCustomersUseCaseSpy implements LoadCustomersUseCase {
-  params: {
-    limit: number
-    lastIdOffset?: string
-  }
-
-  result: Promise<PagedResult<Customer>>
+export class ListCustomersRepositorySpy implements ListCustomersRepository {
+  params: any
+  result: Promise<LimitedPagedResult<Customer>>
 
   constructor () {
     const customers = buildFakeCustomers()
@@ -20,7 +16,7 @@ export class LoadCustomersUseCaseSpy implements LoadCustomersUseCase {
     })
   }
 
-  async execute (limit: number, lastIdOffset?: string): Promise<PagedResult<Customer>> {
+  async listAll (limit: number, lastIdOffset?: string): Promise<LimitedPagedResult<Customer>> {
     this.params = {
       limit,
       lastIdOffset

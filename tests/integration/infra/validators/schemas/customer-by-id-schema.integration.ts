@@ -5,7 +5,7 @@ import { Validator } from '@/validation/validator-protocol'
 import faker from 'faker'
 
 type SutTypes = {
-  sut: Validator<any>
+  sut: Validator
   objectToValidate: any
 }
 

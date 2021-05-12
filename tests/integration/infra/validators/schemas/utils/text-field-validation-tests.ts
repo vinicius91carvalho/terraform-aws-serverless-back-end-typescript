@@ -2,7 +2,7 @@ import { validateFieldSuccess, validateRequiredField, validateTextFieldMaxLength
 import { Validator } from '@/validation/validator-protocol'
 
 type Params = {
-  sut: Validator<any>
+  sut: Validator
   objectToValidate: any
   path?: string[]
   isRequired?: boolean

@@ -10,7 +10,7 @@ import { buildFakeCustomer } from '@/tests/shared/mocks/customer-dto-mock'
 import { Validator } from '@/validation/validator-protocol'
 
 type SutTypes = {
-  sut: Validator<any>
+  sut: Validator
   objectToValidate: any
 }
 
